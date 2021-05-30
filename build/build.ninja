@@ -87,6 +87,20 @@ build CMakeFiles/SimpleSystem.dir/src/utils/Error.cpp.o: CXX_COMPILER__SimpleSys
   OBJECT_DIR = CMakeFiles/SimpleSystem.dir
   OBJECT_FILE_DIR = CMakeFiles/SimpleSystem.dir/src/utils
 
+build CMakeFiles/SimpleSystem.dir/src/utils/concurrence/TaskQueue.cpp.o: CXX_COMPILER__SimpleSystem_Debug ../src/utils/concurrence/TaskQueue.cpp || cmake_object_order_depends_target_SimpleSystem
+  DEP_FILE = CMakeFiles/SimpleSystem.dir/src/utils/concurrence/TaskQueue.cpp.o.d
+  FLAGS = -std=c++11 -pthread -g
+  INCLUDES = -I../include
+  OBJECT_DIR = CMakeFiles/SimpleSystem.dir
+  OBJECT_FILE_DIR = CMakeFiles/SimpleSystem.dir/src/utils/concurrence
+
+build CMakeFiles/SimpleSystem.dir/src/utils/concurrence/ThreadPool.cpp.o: CXX_COMPILER__SimpleSystem_Debug ../src/utils/concurrence/ThreadPool.cpp || cmake_object_order_depends_target_SimpleSystem
+  DEP_FILE = CMakeFiles/SimpleSystem.dir/src/utils/concurrence/ThreadPool.cpp.o.d
+  FLAGS = -std=c++11 -pthread -g
+  INCLUDES = -I../include
+  OBJECT_DIR = CMakeFiles/SimpleSystem.dir
+  OBJECT_FILE_DIR = CMakeFiles/SimpleSystem.dir/src/utils/concurrence
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target SimpleSystem
@@ -95,7 +109,7 @@ build CMakeFiles/SimpleSystem.dir/src/utils/Error.cpp.o: CXX_COMPILER__SimpleSys
 #############################################
 # Link the executable ../bin/SimpleSystem
 
-build ../bin/SimpleSystem: CXX_EXECUTABLE_LINKER__SimpleSystem_Debug CMakeFiles/SimpleSystem.dir/src/main.cpp.o CMakeFiles/SimpleSystem.dir/src/utils/Config.cpp.o CMakeFiles/SimpleSystem.dir/src/utils/Error.cpp.o
+build ../bin/SimpleSystem: CXX_EXECUTABLE_LINKER__SimpleSystem_Debug CMakeFiles/SimpleSystem.dir/src/main.cpp.o CMakeFiles/SimpleSystem.dir/src/utils/Config.cpp.o CMakeFiles/SimpleSystem.dir/src/utils/Error.cpp.o CMakeFiles/SimpleSystem.dir/src/utils/concurrence/TaskQueue.cpp.o CMakeFiles/SimpleSystem.dir/src/utils/concurrence/ThreadPool.cpp.o
   FLAGS = -std=c++11 -pthread -g
   OBJECT_DIR = CMakeFiles/SimpleSystem.dir
   POST_BUILD = :

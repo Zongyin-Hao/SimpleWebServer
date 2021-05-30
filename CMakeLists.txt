@@ -11,6 +11,8 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/utils/Config.cpp
         src/utils/Error.cpp
+        src/utils/concurrence/TaskQueue.cpp
+        src/utils/concurrence/ThreadPool.cpp
         )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
