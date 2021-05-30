@@ -6,10 +6,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 # set executable program path
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
-# get *.cpp in src
-file(GLOB_RECURSE SRC src/*.cpp)
 # generate executable program
-add_executable(${PROJECT_NAME} ${SRC})
+add_executable(${PROJECT_NAME}
+        src/main.cpp
+        src/utils/Config.cpp
+        src/utils/Error.cpp
+        )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         ${CMAKE_SOURCE_DIR}/include)

@@ -1,4 +1,4 @@
 # ninja log v5
-0	252	1622354363408026381	CMakeFiles/SimpleSystem.dir/src/main.cpp.o	4bbeb32088ec019d
+1	209	1622356302368929464	CMakeFiles/SimpleSystem.dir/src/main.cpp.o	4bbeb32088ec019d
 252	386	1622354363540034105	SimpleSystem	7acfa9e48644eb89
-1	130	1622354733550603080	../bin/SimpleSystem	bdbb5e6f176d16e9
+209	335	1622356302496929093	../bin/SimpleSystem	bdbb5e6f176d16e9
