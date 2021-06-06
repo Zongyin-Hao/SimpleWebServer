@@ -25,7 +25,7 @@ rule CUSTOM_COMMAND
 rule CXX_COMPILER__SimpleSystem_Debug
   depfile = $DEP_FILE
   deps = gcc
-  command = /usr/bin/clang++ $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
+  command = /usr/bin/c++ $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
   description = Building CXX object $out
 
 
@@ -33,7 +33,7 @@ rule CXX_COMPILER__SimpleSystem_Debug
 # Rule for linking CXX executable.
 
 rule CXX_EXECUTABLE_LINKER__SimpleSystem_Debug
-  command = $PRE_LINK && /usr/bin/clang++ $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
+  command = $PRE_LINK && /usr/bin/c++ $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
   description = Linking CXX executable $TARGET_FILE
   restat = $RESTAT
 
@@ -42,7 +42,7 @@ rule CXX_EXECUTABLE_LINKER__SimpleSystem_Debug
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /snap/clion/151/bin/cmake/linux/bin/cmake --regenerate-during-build -S/home/hzy/Projects/System/SimpleSystem -B/home/hzy/Projects/System/SimpleSystem/build
+  command = /snap/clion/152/bin/cmake/linux/bin/cmake --regenerate-during-build -S/home/hzy/Projects/System/SimpleSystem -B/home/hzy/Projects/System/SimpleSystem/build
   description = Re-running CMake...
   generator = 1
 

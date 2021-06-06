@@ -1,4 +1,4 @@
-/snap/clion/151/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -G Ninja /home/hzy/Projects/System/SimpleSystem
+/snap/clion/152/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja /home/hzy/Projects/System/SimpleSystem
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /home/hzy/Projects/System/SimpleSystem/build
