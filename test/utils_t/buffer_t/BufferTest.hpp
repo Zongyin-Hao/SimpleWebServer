@@ -6,6 +6,7 @@
 #define SIMPLESYSTEM_BUFFERTEST_HPP
 
 #include "utils/buffer/Buffer.h"
+#include <iostream>
 
 namespace utils_t { namespace buffer_t {
     class BufferTest {
@@ -17,23 +18,23 @@ namespace utils_t { namespace buffer_t {
 
         void point(int no) {
             bool flag = true;
-            cout << "====================test" << no << "====================" << endl;
-            cout << "available: " << buffer.availableBytes() << " " << r_ << endl;
+            std::cout << "====================test" << no << "====================" << std::endl;
+            std::cout << "available: " << buffer.availableBytes() << " " << r_ << std::endl;
             flag = (flag && (buffer.availableBytes() == r_));
-            cout << "readable: " << buffer.readableBytes() << " " << w-r << endl;
+            std::cout << "readable: " << buffer.readableBytes() << " " << w-r << std::endl;
             flag = (flag && (buffer.readableBytes() == (w-r)));
-            cout << "writable: " << buffer.writableBytes() << " " << buffersz-w_ << endl;
+            std::cout << "writable: " << buffer.writableBytes() << " " << buffersz-w_ << std::endl;
             flag = (flag && (buffer.writableBytes() == (buffersz-w_)));
             if (buffer.nextReadPos() != buffer.nextWritePos()) {
-                cout << "next_read_pos: " << *buffer.nextReadPos() << " " << str[r] << endl;
+                std::cout << "next_read_pos: " << *buffer.nextReadPos() << " " << str[r] << std::endl;
                 flag = (flag && (*buffer.nextReadPos() == str[r]));
-                cout << "next_write_pos: " << *(buffer.nextWritePos()-1) << " " << str[w-1] << endl;
+                std::cout << "next_write_pos: " << *(buffer.nextWritePos()-1) << " " << str[w-1] << std::endl;
                 flag = (flag && (*(buffer.nextWritePos()-1) == str[w-1]));
             }
             if (flag) {
-                cout << "passed" << endl;
+                std::cout << "passed" << std::endl;
             } else {
-                cout << "error" << endl;
+                std::cout << "error" << std::endl;
                 exit(-1);
             }
         }

@@ -15,8 +15,6 @@
 namespace transmission { namespace webserver {
     class Http {
     public:
-        // user function
-        static std::unordered_map<std::string, std::function<void(std::shared_ptr<Http>)> > userFunction;
         // close connection when (BAD_REQUEST, INTERNAL_ERROR)
         enum CODE {
             OK = 200,
@@ -30,12 +28,13 @@ namespace transmission { namespace webserver {
         };
 
     private:
+        // basic
         bool m_debug;
+        int m_fd; // debug
         utils::buffer::Buffer m_readBuffer; // read buffer
         utils::buffer::Buffer m_writeBuffer; // write buffer
         int m_iovCnt;
         struct iovec m_iov[2];
-
         // request
         std::string m_line;
         PARSE_STATE m_state;
@@ -51,7 +50,7 @@ namespace transmission { namespace webserver {
 
     public:
         // basic
-        Http(bool debug = false);
+        Http(int fd, bool debug = false);
         ~Http() = default;
         Http(const Http&) = delete;
         Http& operator = (const Http&) = delete;
@@ -60,18 +59,18 @@ namespace transmission { namespace webserver {
         ssize_t readRequest(int fd, int *ern);
         ssize_t writeResponse(int fd, int *ern);
         size_t toWriteBytes();
-        bool hasError() const;
-        void unMapFile();
-
+        void clearBuffer();
         // request & response
-        void init();
-        bool process();
+        void initNextHttp();
+        bool process(std::unordered_map<std::string, std::function<void(Http*)>> *userFunction);
         std::string getMethod() const;
         std::string getPath() const;
         std::string getVersion() const;
         std::string getContent() const;
         bool isKeepAlive() const;
         int getCode() const;
+        bool hasError() const;
+        void unMapFile();
 
     private:
         // request & response
@@ -80,14 +79,15 @@ namespace transmission { namespace webserver {
         bool parseRequestLine();
         bool parseHeader();
         bool parseContent();
-        void execute();
+        void execute(std::unordered_map<std::string, std::function<void(Http*)>> *userFunction);
         void addStateLine();
         void addHeader();
         void addContent();
-
     };
 }}
 
+//    1 REQUEST:
+//    1.1 GET
 //    GET /562f25980001b1b106000338.jpg HTTP/1.1
 //    Host:img.mukewang.com
 //    User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64)
@@ -96,7 +96,7 @@ namespace transmission { namespace webserver {
 //    Accept-Encoding:gzip, deflate, sdch
 //    Accept-Language:zh-CN,zh;q=0.8
 //    blank
-//    ==================================================
+//    1.2 POST
 //    POST / HTTP/1.1
 //    Host:www.wrox.com
 //    User-Agent:Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022)
@@ -105,7 +105,7 @@ namespace transmission { namespace webserver {
 //    Connection: Keep-Alive
 //    blank
 //    name=Professional%20Ajax&publisher=Wiley
-//
+//    2 RESPONSE
 //    HTTP/1.1 200 OK
 //    Date: Fri, 22 May 2009 06:07:21 GMT
 //    Content-Type: text/html; charset=UTF-8

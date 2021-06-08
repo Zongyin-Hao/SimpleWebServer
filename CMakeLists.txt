@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.16)
 project(SimpleSystem)
 
 # config cpp
@@ -8,16 +8,16 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 # generate executable program
 add_executable(${PROJECT_NAME}
-        #src/main.cpp
+#        src/main.cpp
         test/main_t.cpp
 
-        src/transmission/webserver/Http.cpp
         src/transmission/webserver/WebServer.cpp
+        src/transmission/webserver/Http.cpp
+        src/utils/concurrence/ThreadPool.cpp
+        src/utils/buffer/Buffer.cpp
+        src/utils/nio/Epoll.cpp
         src/utils/Config.cpp
         src/utils/Error.cpp
-        src/utils/concurrence/ThreadPool.cpp
-        src/utils/nio/Epoll.cpp
-        include/utils/buffer/Buffer.h src/utils/buffer/Buffer.cpp
 
         test/utils_t/concurrence_t/ThreadPoolTest.hpp
         test/utils_t/buffer_t/BufferTest.hpp

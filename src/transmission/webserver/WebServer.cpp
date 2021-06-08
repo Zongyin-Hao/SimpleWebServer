@@ -12,25 +12,23 @@
 #include <cerrno>
 #include <iostream>
 #include <cassert>
-using std::cout;
-using std::endl;
 
 namespace transmission { namespace webserver {
-    WebServer::WebServer(int port, int trigMode, int threadNum, bool debug) :
-    m_fd(-1), isClosed(false), m_trigMode(trigMode), m_event(0), m_userEvent(0),
+    WebServer::WebServer(int port, int threadNum, bool debug) :
+    m_fd(-1), isClosed(false), m_event(0), m_userEvent(0),
     m_epoll(), m_threadPool(threadNum), m_userCnt(0), m_debug(debug) {
-        // init socket
+        // initNextHttp socket
         int ret;
         if (port > 65535 || port < 1024) {
             utils::Error::Throw(utils::Error::PORT_RANGE_ERROR);
         }
-        struct sockaddr_in addr = {};
-        addr.sin_family = AF_INET;
-        addr.sin_addr.s_addr = htonl(INADDR_ANY);
-        addr.sin_port = htons(port);
+        struct sockaddr_in address = {};
+        address.sin_family = AF_INET;
+        address.sin_addr.s_addr = htonl(INADDR_ANY);
+        address.sin_port = htons(port);
         struct linger ling = {0};
         ling.l_onoff = 1;
-        ling.l_linger = 3; // 3s
+        ling.l_linger = 1; // 1s
         // create socket
         m_fd = socket(AF_INET, SOCK_STREAM, 0);
         if (m_fd < 0) {
@@ -41,8 +39,13 @@ namespace transmission { namespace webserver {
         if (ret < 0) {
             utils::Error::Throw(utils::Error::CFG_SOCKET_ERROR);
         }
+        int optval = 1; // !!!
+        ret = setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (const void*)&optval, sizeof(int));
+        if(ret == -1) {
+            utils::Error::Throw(utils::Error::CFG_SOCKET_ERROR);
+        }
         // bind
-        ret = bind(m_fd, (struct sockaddr *)&addr, sizeof(addr));
+        ret = bind(m_fd, (struct sockaddr *)&address, sizeof(address));
         if (ret < 0) {
             utils::Error::Throw(utils::Error::BIND_ERROR);
         }
@@ -52,14 +55,10 @@ namespace transmission { namespace webserver {
         if (ret < 0) {
             utils::Error::Throw(utils::Error::LISTEN_ERROR);
         }
-        // 4 init epoll
-        m_event = EPOLLRDHUP;
-        m_userEvent = EPOLLRDHUP | EPOLLONESHOT; // important!
-        if (m_trigMode == 1) { // ET
-            m_event |= EPOLLET;
-            m_userEvent |= EPOLLET;
-        }
-        ret = m_epoll.addFd(m_fd, m_event|EPOLLIN);
+        // 4 initNextHttp epoll
+        m_event = EPOLLRDHUP | EPOLLET;
+        m_userEvent = EPOLLRDHUP | EPOLLET| EPOLLONESHOT; // important!
+        ret = m_epoll.addFd(m_fd, m_event | EPOLLIN);
         if (ret == 0) {
             utils::Error::Throw(utils::Error::INIT_EPOLL_ERROR);
         }
@@ -67,6 +66,10 @@ namespace transmission { namespace webserver {
     }
 
     WebServer::~WebServer() {
+        for (auto & m_user : m_users) {
+            delete m_user.second;
+            m_user.second = nullptr;
+        }
         if (!isClosed) {
             isClosed = true;
             close(m_fd);
@@ -81,24 +84,27 @@ namespace transmission { namespace webserver {
         fcntl(fd, F_SETFL, newOption);
     }
 
-    void WebServer::addUserFunction(const std::string& path,
-                                const std::function<void(std::shared_ptr<Http>)>& func) {
-        Http::userFunction[path] = func;
-    }
-
     void WebServer::start() {
+
+//        // test
+//        m_threadPool.addTask([this]{
+//            std::this_thread::sleep_for(std::chrono::seconds(10));
+//            std::cout << this->m_userCnt << std::endl;
+//        });
+
         while (!isClosed) {
             if (m_debug) {
-                cout << "========================================" << endl;
+                std::cout << "========================================" << std::endl;
             }
-            int eventCnt = m_epoll.wait(-1); // blocking
+            // blocking
+            int eventCnt = m_epoll.wait(-1);
             // process events
             for (int i = 0; i < eventCnt; i++) {
                 int fd = m_epoll.getFd(i);
                 uint32_t events = m_epoll.getEvent(i);
                 if (fd == m_fd) {
                     addUser();
-                } else if ((events & EPOLLRDHUP) || (events & EPOLLHUP) || (events & EPOLLERR)) {
+                } else if (events & (EPOLLRDHUP|EPOLLHUP|EPOLLERR)) {
                     delUser(fd);
                 } else if (events & EPOLLIN) {
                     processRead(fd);
@@ -112,61 +118,73 @@ namespace transmission { namespace webserver {
     }
 
     void WebServer::addUser() {
-        struct sockaddr_in addr{};
-        socklen_t len = sizeof(addr);
-        do {
-            int fd = accept(m_fd, (struct sockaddr*)&addr, &len);
+        struct sockaddr_in address = {};
+        socklen_t len = sizeof(address);
+        while (true) {
+            int fd = accept(m_fd, (struct sockaddr*)&address, &len);
             if (fd < 0 || m_userCnt >= MAX_USER) {
                 return;
             }
-            assert(m_users.count(fd) == 0);
             setNonBlocking(fd);
+            if (m_users.count(fd) == 0) {
+                m_users[fd] = new Http(fd, m_debug);
+            } else {
+                Http* user = m_users[fd];
+                user->clearBuffer();
+                user->initNextHttp();
+            }
             m_userCnt++;
-            m_users[fd] = std::make_shared<Http>(m_debug);
             m_epoll.addFd(fd, m_userEvent | EPOLLIN);
             if (m_debug) {
-                cout << "add user, fd = " << fd << endl;
-                cout << "userCnt = " << m_userCnt << endl;
+                std::cout << "add user, fd = " << fd << std::endl;
+                std::cout << "userCnt = " << m_userCnt << std::endl;
             }
-        } while (m_trigMode == 1);
+        }
     }
 
     void WebServer::delUser(int fd) {
         assert(m_users.count(fd) > 0);
-        std::shared_ptr<Http> user = m_users[fd];
+        Http* user = m_users[fd];
         assert(user != nullptr);
-        user->unMapFile();
-        close(fd);
         m_userCnt--;
-        m_users.erase(fd);
         m_epoll.delFd(fd);
+        close(fd);
         if (m_debug) {
-            cout << "delete user, fd = " << fd << endl;
-            cout << "userCnt = " << m_userCnt << endl;
+            std::cout << "delete user, fd = " << fd << std::endl;
+            std::cout << "userCnt = " << m_userCnt << std::endl;
         }
     }
 
     void WebServer::processRead(int fd) {
         assert(m_users.count(fd) > 0);
-        std::shared_ptr<Http> user = m_users[fd];
+        Http* user = m_users[fd];
         assert(user != nullptr);
         if (m_debug) {
-            cout << "epoll in" << endl;
+            std::cout << "epoll in" << std::endl;
         }
         m_threadPool.addTask([this, fd, user] {
             // read request
-            do {
+            while (true) {
                 int ern = 0;
                 ssize_t ret = user->readRequest(fd, &ern);
-                if (ret <= 0) {
-                    if (ern == EAGAIN) {
+                if (ret < 0) {
+                    if (ern == EAGAIN || ern == EWOULDBLOCK) {
                         break;
+                    }
+                    if (m_debug) {
+                        std::cout << "processRead:ret < 0:delete user" << std::endl;
+                    }
+                    delUser(fd);
+                    return;
+                } else if (ret == 0) {
+                    if (m_debug) {
+                        std::cout << "processRead:ret == 0:delete user" << std::endl;
                     }
                     delUser(fd);
                     return;
                 }
-            } while (m_trigMode == 1); // ET
-            if (user->process()) {
+            }
+            if (user->process(&userFunction)) {
                 m_epoll.modFd(fd, m_userEvent | EPOLLOUT);
             } else {
                 m_epoll.modFd(fd, m_userEvent | EPOLLIN);
@@ -176,30 +194,46 @@ namespace transmission { namespace webserver {
 
     void WebServer::processWrite(int fd) {
         assert(m_users.count(fd) > 0);
-        std::shared_ptr<Http> user = m_users[fd];
+        Http* user = m_users[fd];
         assert(user != nullptr);
         if (m_debug) {
-            cout << "epoll out" << endl;
+            std::cout << "epoll out" << std::endl;
         }
         m_threadPool.addTask([this, fd, user] {
-            do {
+            while (true) {
                 int ern = 0;
                 ssize_t ret = user->writeResponse(fd, &ern);
-                if (ret <= 0) {
-                    if (ern == EAGAIN) {
+                if (ret < 0) {
+                    if (ern == EAGAIN || ern == EWOULDBLOCK) {
                         break;
+                    }
+                    if (m_debug) {
+                        std::cout << "processWrite:ret < 0:delete user" << std::endl;
+                    }
+                    delUser(fd);
+                } else if (ret == 0) {
+//                    assert(false);
+                    break;
+                }
+            }
+            if (user->toWriteBytes() == 0) {
+                // buffer dirty
+                if (user->hasError()) {
+                    if (m_debug) {
+                        std::cout << "processWrite:has error:delete user" << std::endl;
                     }
                     delUser(fd);
                     return;
                 }
-            } while(m_trigMode == 1);
-            if (user->toWriteBytes() == 0) {
-                if (user->hasError() || !user->isKeepAlive()) {
+                if (!user->isKeepAlive()) {
+                    if (m_debug) {
+                        std::cout << "processWrite:keep alive:delete user" << std::endl;
+                    }
                     delUser(fd);
                     return;
                 }
-                user->init();
-                if (user->process()) {
+                user->initNextHttp();
+                if (user->process(&userFunction)) {
                     m_epoll.modFd(fd, m_userEvent | EPOLLOUT);
                 } else {
                     m_epoll.modFd(fd, m_userEvent | EPOLLIN);

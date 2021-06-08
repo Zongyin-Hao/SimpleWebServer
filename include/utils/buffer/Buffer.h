@@ -11,6 +11,7 @@
 namespace utils { namespace buffer {
     class Buffer {
     private:
+//        int test;
         std::vector<char> m_buffer;
         size_t m_readPos;
         size_t m_writePos;

@@ -6,64 +6,64 @@
 #include <cstring>
 #include <cassert>
 #include <iostream>
-using std::cout;
-using std::endl;
 
 namespace utils { namespace buffer {
     // recommend 1024
     Buffer::Buffer(int initBufferSize) : m_buffer(initBufferSize),
-    m_readPos(0), m_writePos(0) {}
+    m_readPos(0), m_writePos(0) {
+//        test = 0;
+    }
 
     // len of [0, readPos)
-    inline size_t Buffer::availableBytes() const {
+    size_t Buffer::availableBytes() const {
         return m_readPos;
     }
 
     // len of [readPos, writePos)
-    inline size_t Buffer::readableBytes() const {
+    size_t Buffer::readableBytes() const {
         return m_writePos - m_readPos;
     }
 
     // begin position
-    inline char* Buffer::beginPos() const {
+    char* Buffer::beginPos() const {
         return const_cast<char*>(&*m_buffer.begin());
     }
 
     // next read position
-    inline char* Buffer::nextReadPos() const {
+    char* Buffer::nextReadPos() const {
         return beginPos() + m_readPos;
     }
 
     // next write position
-    inline char* Buffer::nextWritePos() const {
+    char* Buffer::nextWritePos() const {
         return beginPos() + m_writePos;
     }
 
     // len of [writePos, bufferSize)
-    inline size_t Buffer::writableBytes() const {
+    size_t Buffer::writableBytes() const {
         return m_buffer.size() - m_writePos;
     }
 
     // for iov
-    inline void Buffer::readBuffer_idx(size_t len) {
+    void Buffer::readBuffer_idx(size_t len) {
         assert(len <= readableBytes());
         m_readPos += len;
     }
 
     // for iov
-    inline void Buffer::readBufferAll_idx() {
+    void Buffer::readBufferAll_idx() {
         m_readPos = 0;
         m_writePos = 0;
     }
 
     // for iov
-    inline void Buffer::writeBuffer_idx(size_t len) {
+    void Buffer::writeBuffer_idx(size_t len) {
         assert(len <= writableBytes());
         m_writePos += len;
     }
 
     // read [nextReadPos(), nextReadPos()+len)
-    inline std::string Buffer::readBuffer(size_t len) {
+    std::string Buffer::readBuffer(size_t len) {
         assert(len <= readableBytes());
         std::string str(nextReadPos(), len);
         m_readPos += len;
@@ -72,7 +72,7 @@ namespace utils { namespace buffer {
 
     // read [nextReadPos(), nextReadPos()+readableBytes())
     // may be more efficient
-    inline std::string Buffer::readBufferAll() {
+    std::string Buffer::readBufferAll() {
         std::string str(nextReadPos(), readableBytes());
         m_readPos = 0;
         m_writePos = 0;
@@ -101,13 +101,17 @@ namespace utils { namespace buffer {
             m_readPos = 0;
             m_writePos = rdb;
         }
+//        if (m_buffer.size() > test) {
+//            test += 10000;
+//            std::cout << m_buffer.size() << std::endl;
+//        }
     }
 
     void Buffer::output() {
-        cout << "--------------------" << endl;
+        std::cout << "--------------------" << std::endl;
         for (size_t i = m_readPos; i < m_writePos; i++) {
-             cout << m_buffer[i];
+             std::cout << m_buffer[i];
         }
-        cout << "----------" << endl;
+        std::cout << "----------" << std::endl;
     }
 }}

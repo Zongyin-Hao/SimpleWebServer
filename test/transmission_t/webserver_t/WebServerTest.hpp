@@ -11,14 +11,17 @@ namespace transmission_t { namespace webserver_t {
     class WebServerTest {
     public:
         void test() {
-            transmission::webserver::WebServer::addUserFunction("/test",
-            [](std::shared_ptr<transmission::webserver::Http> user) {
-                cout << "@@@@@ Method = " << user->getMethod() << endl;
-                cout << "@@@@@ Path = " << user->getPath() << endl;
-                cout << "@@@@@ Version = " << user->getVersion() << endl;
-                cout << "@@@@@ isKeepAlive = " << user->isKeepAlive() << endl;
-            });
-            transmission::webserver::WebServer webServer(55555, 1, 16, true);
+            transmission::webserver::WebServer webServer(55555, 6, 0);
+            webServer.addUserFunction("/",
+                                      [](transmission::webserver::Http* user) {
+                                      });
+            webServer.addUserFunction("/test",
+                                      [](transmission::webserver::Http* user) {
+                                          cout << "@@@@@ Method = " << user->getMethod() << endl;
+                                          cout << "@@@@@ Path = " << user->getPath() << endl;
+                                          cout << "@@@@@ Version = " << user->getVersion() << endl;
+                                          cout << "@@@@@ isKeepAlive = " << user->isKeepAlive() << endl;
+                                      });
             webServer.start();
         }
     };

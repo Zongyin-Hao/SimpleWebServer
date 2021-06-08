@@ -1,6 +1,7 @@
 #include "utils/Error.h"
 
 #include <string>
+#include <iostream>
 
 namespace utils {
     void Error::Throw(int errCode) {
@@ -22,7 +23,7 @@ namespace utils {
                 errmsg = "listen error";
                 break;
             case INIT_EPOLL_ERROR:
-                errmsg = "init epoll error";
+                errmsg = "initNextHttp epoll error";
                 break;
             case EPOLL_UNEXPECTED_ERROR:
                 errmsg = "epoll unexpected error";
@@ -34,6 +35,7 @@ namespace utils {
                 errmsg = "undefined error";
                 break;
         }
-        throw errmsg;
+        std::cerr << errmsg << std::endl;
+        exit(0);
     }
 }
