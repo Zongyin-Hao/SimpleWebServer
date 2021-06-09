@@ -11,7 +11,7 @@ namespace transmission_t { namespace webserver_t {
     class WebServerTest {
     public:
         void test() {
-            transmission::webserver::WebServer webServer(55555, 6, 0);
+            transmission::webserver::WebServer webServer(55555, 16, 0);
             webServer.addUserFunction("/",
                                       [](transmission::webserver::Http* user) {
                                       });

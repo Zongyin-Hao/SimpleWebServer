@@ -7,56 +7,80 @@
   </component>
   <component name="CMakeSettings">
     <configurations>
-      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" GENERATION_DIR="build" ENABLED="true" />
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" ENABLED="true" />
+      <configuration PROFILE_NAME="Release" CONFIG_NAME="Release" ENABLED="true" />
     </configurations>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2444c444-42c4-4cbe-a5e7-089f4d9ab038" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeCache.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/CMakeOutput.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/transmission/webserver/Http.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/transmission/webserver/Http.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/transmission/webserver/HttpRequest.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/transmission/webserver/HttpResponse.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/transmission/webserver/WebServer.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/transmission/webserver/WebServer.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/Config.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/Config.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/Error.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/Error.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/buffer/Buffer.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/buffer/Buffer.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/concurrence/ThreadPool.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/concurrence/ThreadPool.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/nio/Epoll.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/nio/Epoll.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/test/main_t.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/test/main_t.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/test/test.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/test/utils_t/concurrence_t/ThreadPoolTest.cpp.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/clion-environment.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/clion-environment.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/CMakeFiles/clion-log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/rules.ninja" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/SimpleSystem" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/transmission/text" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/SimpleSystem" beforeDir="false" afterPath="$PROJECT_DIR$/bin/SimpleSystem" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/query/cache-v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/query/cmakeFiles-v1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/query/codemodel-v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/cache-v2-f326f8436d147d7453e3.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/cmakeFiles-v1-e373c3dda66fce98da08.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/codemodel-v2-3939c28170aa341eecf7.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/index-2021-06-06T15-01-01-0138.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/.cmake/api/v1/reply/target-SimpleSystem-Debug-a25d6bea795f0df61b78.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/.ninja_deps" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/.ninja_log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeCache.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.16.3/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.16.3/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.16.3/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.16.3/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.16.3/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.16.3/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.16.3/CompilerIdC/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.16.3/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.16.3/CompilerIdCXX/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.19.2/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.19.2/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.19.2/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.19.2/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.19.2/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.19.2/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.19.2/CompilerIdC/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.19.2/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/3.19.2/CompilerIdCXX/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/CMakeOutput.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/Makefile.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/Makefile2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/CXX.includecache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/depend.internal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/flags.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/link.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/transmission/webserver/Http.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/transmission/webserver/WebServer.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/Config.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/Error.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/buffer/Buffer.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/concurrence/ThreadPool.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/src/utils/nio/Epoll.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/SimpleSystem.dir/test/main_t.cpp.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/TargetDirectories.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/clion-environment.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/clion-log.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/cmake.check_cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/CMakeFiles/progress.marks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/SimpleSystem.cbp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/Testing/Temporary/LastTest.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/build.ninja" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/cmake_install.cmake" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/include/transmission/webserver/Http.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/transmission/webserver/Http.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/transmission/webserver/WebServer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/transmission/webserver/WebServer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/utils/buffer/Buffer.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/utils/buffer/Buffer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/transmission/webserver/Http.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/transmission/webserver/Http.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/transmission/webserver/WebServer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/transmission/webserver/WebServer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/Error.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/Error.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utils/buffer/Buffer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/buffer/Buffer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/main_t.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/main_t.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/transmission_t/webserver_t/WebServerTest.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/transmission_t/webserver_t/WebServerTest.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/utils_t/buffer_t/BufferTest.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/test/utils_t/buffer_t/BufferTest.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/webbench-1.5/COPYRIGHT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/webbench-1.5/ChangeLog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/webbench-1.5/Makefile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/webbench-1.5/debian/changelog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/webbench-1.5/debian/control" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/webbench-1.5/debian/copyright" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/webbench-1.5/debian/dirs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/webbench-1.5/debian/rules" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/webbench-1.5/socket.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/webbench-1.5/webbench" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/webbench-1.5/webbench.1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/webbench-1.5/webbench.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/webbench-1.5/webbench.o" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +90,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Release" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -89,6 +113,11 @@
     <property name="settings.editor.selected.configurable" value="CMakeSettings" />
   </component>
   <component name="RunManager">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SimpleSystem" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SimpleSystem" TARGET_NAME="SimpleSystem" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="SimpleSystem" RUN_TARGET_NAME="SimpleSystem">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -112,7 +141,7 @@
       <workItem from="1623006803982" duration="251000" />
       <workItem from="1623007086300" duration="2141000" />
       <workItem from="1623142747955" duration="7736000" />
-      <workItem from="1623158411515" duration="9004000" />
+      <workItem from="1623158411515" duration="18978000" />
     </task>
     <servers />
   </component>

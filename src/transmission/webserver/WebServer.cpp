@@ -88,8 +88,10 @@ namespace transmission { namespace webserver {
 
 //        // test
 //        m_threadPool.addTask([this]{
-//            std::this_thread::sleep_for(std::chrono::seconds(10));
-//            std::cout << this->m_userCnt << std::endl;
+//            while (true) {
+//                std::this_thread::sleep_for(std::chrono::seconds(10));
+//                std::cout << this->m_userCnt << std::endl;
+//            }
 //        });
 
         while (!isClosed) {

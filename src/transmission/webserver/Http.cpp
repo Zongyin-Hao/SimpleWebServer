@@ -15,7 +15,7 @@
 #include <iostream>
 
 namespace transmission { namespace webserver {
-    static std::unordered_map<std::string, std::string> TYPE = {
+    static std::unordered_map<std::string, std::string> HTTP_TYPE = {
             { ".html",  "text/html" },
             { ".xml",   "text/xml" },
             { ".xhtml", "application/xhtml+xml" },
@@ -36,7 +36,7 @@ namespace transmission { namespace webserver {
             { ".css",   "text/css "},
             { ".js",    "text/javascript "},
     };
-    static std::unordered_map<int, std::string> STATUS = {
+    static std::unordered_map<int, std::string> HTTP_STATUS = {
             { Http::OK, "OK" },
             { Http::BAD_REQUEST, "Bad Request" },
             { Http::FORBIDDEN, "Forbidden" },
@@ -47,6 +47,7 @@ namespace transmission { namespace webserver {
     // ==============================basic==============================
     Http::Http(int fd, bool debug) : m_fd(fd), m_readBuffer(1024),
     m_writeBuffer(1024), m_debug(debug) {
+        clearBuffer();
         initNextHttp();
     }
 
@@ -65,6 +66,7 @@ namespace transmission { namespace webserver {
             if (static_cast<size_t>(len) <= wtb) {
                 m_readBuffer.writeBuffer_idx(static_cast<size_t>(len));
             } else {
+                m_readBuffer.writeBuffer_idx(static_cast<size_t>(wtb));
                 m_readBuffer.writeBuffer(buffer, len-wtb);
             }
             if (m_debug) {
@@ -82,14 +84,14 @@ namespace transmission { namespace webserver {
         }
         else if (len > 0) {
             if (static_cast<size_t>(len) > m_iov[0].iov_len) {
-                m_iov[1].iov_base = (uint8_t*)m_iov[1].iov_base+(len-m_iov[0].iov_len);
+                m_iov[1].iov_base = (char*)m_iov[1].iov_base+(len-m_iov[0].iov_len);
                 m_iov[1].iov_len -= (len - m_iov[0].iov_len);
                 if (m_iov[0].iov_len != 0) {
                     m_writeBuffer.readBufferAll_idx();
                     m_iov[0].iov_len = 0;
                 }
             } else {
-                m_iov[0].iov_base = (uint8_t*)m_iov[0].iov_base+len;
+                m_iov[0].iov_base = (char*)m_iov[0].iov_base+len;
                 m_iov[0].iov_len -= len;
                 m_writeBuffer.readBuffer_idx(len);
             }
@@ -110,12 +112,6 @@ namespace transmission { namespace webserver {
 
     // ==============================request & response==============================
     void Http::initNextHttp() {
-        // basic
-        m_iovCnt = 0;
-        m_iov[0].iov_base = nullptr;
-        m_iov[0].iov_len = 0;
-        m_iov[1].iov_base = nullptr;
-        m_iov[1].iov_len = 0;
         // request
         m_line = "";
         m_state = START;
@@ -127,7 +123,11 @@ namespace transmission { namespace webserver {
         // response
         m_code = OK;
         unMapFile();
-        m_fileStat = {0};
+        m_iovCnt = 0;
+        m_iov[0].iov_base = nullptr;
+        m_iov[0].iov_len = 0;
+        m_iov[1].iov_base = nullptr;
+        m_iov[1].iov_len = 0;
     }
 
     // return false means incomplete
@@ -228,6 +228,7 @@ namespace transmission { namespace webserver {
             munmap(m_file, m_fileStat.st_size);
             m_file = nullptr;
         }
+        m_fileStat = {0};
     }
 
     // true:get a line, false:incomplete
@@ -241,6 +242,7 @@ namespace transmission { namespace webserver {
         if (lineEnd == m_readBuffer.nextWritePos()) {
             if (m_debug) {
                 std::cout << "[fd:" << m_fd << "] " << "incomplete" << std::endl;
+                m_readBuffer.output();
             }
             return false;
         }
@@ -354,11 +356,11 @@ namespace transmission { namespace webserver {
 
     void Http::addStateLine() {
         std::string status;
-        if (STATUS.count(m_code) == 1) {
-            status = STATUS.find(m_code)->second;
+        if (HTTP_STATUS.count(m_code) == 1) {
+            status = HTTP_STATUS.find(m_code)->second;
         } else {
             m_code = INTERNAL_ERROR;
-            status = STATUS.find(m_code)->second;
+            status = HTTP_STATUS.find(m_code)->second;
         }
         std::string msg = "HTTP/1.1 " +
                 std::to_string(m_code) +
@@ -382,8 +384,8 @@ namespace transmission { namespace webserver {
         std::string::size_type idx = m_path.find_last_of('.');
         if (idx != std::string::npos) {
             std::string suffix = m_path.substr(idx);
-            if (TYPE.count(suffix) == 1) {
-                tp = TYPE.find(suffix)->second;
+            if (HTTP_TYPE.count(suffix) == 1) {
+                tp = HTTP_TYPE.find(suffix)->second;
             }
         }
         msg += "Content-type: " + tp + "\r\n";

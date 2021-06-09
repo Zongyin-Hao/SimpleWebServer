@@ -11,7 +11,6 @@ namespace utils { namespace buffer {
     // recommend 1024
     Buffer::Buffer(int initBufferSize) : m_buffer(initBufferSize),
     m_readPos(0), m_writePos(0) {
-//        test = 0;
     }
 
     // len of [0, readPos)
@@ -101,10 +100,6 @@ namespace utils { namespace buffer {
             m_readPos = 0;
             m_writePos = rdb;
         }
-//        if (m_buffer.size() > test) {
-//            test += 10000;
-//            std::cout << m_buffer.size() << std::endl;
-//        }
     }
 
     void Buffer::output() {
@@ -112,6 +107,6 @@ namespace utils { namespace buffer {
         for (size_t i = m_readPos; i < m_writePos; i++) {
              std::cout << m_buffer[i];
         }
-        std::cout << "----------" << std::endl;
+        std::cout << "--------------------" << std::endl;
     }
 }}

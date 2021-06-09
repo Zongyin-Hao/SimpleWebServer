@@ -1,9 +1,0 @@
-# ninja log v5
-1	66	1622978368813093106	CMakeFiles/SimpleSystem.dir/src/utils/Config.cpp.o	484673d677410a3f
-66	253	1622978369009097051	CMakeFiles/SimpleSystem.dir/src/utils/nio/Epoll.cpp.o	e141c8f30556e60a
-6	336	1622978369093098741	CMakeFiles/SimpleSystem.dir/src/utils/Error.cpp.o	c21ed0d51b6a25e4
-254	634	1622978369389104700	CMakeFiles/SimpleSystem.dir/src/utils/buffer/Buffer.cpp.o	5b2b14b9cd2bab04
-10	1067	1622978369821113396	CMakeFiles/SimpleSystem.dir/src/utils/concurrence/ThreadPool.cpp.o	c4bebd5085c053a0
-0	1088	1622978369845113880	CMakeFiles/SimpleSystem.dir/test/main_t.cpp.o	258db4c31ef6b493
-1	1377	1622978370133119679	CMakeFiles/SimpleSystem.dir/src/transmission/webserver/WebServer.cpp.o	c90f6ccebfb60dcb
-0	3303	1622978372057158427	CMakeFiles/SimpleSystem.dir/src/transmission/webserver/Http.cpp.o	757d9035c75b0d10

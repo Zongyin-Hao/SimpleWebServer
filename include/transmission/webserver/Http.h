@@ -33,8 +33,6 @@ namespace transmission { namespace webserver {
         int m_fd; // debug
         utils::buffer::Buffer m_readBuffer; // read buffer
         utils::buffer::Buffer m_writeBuffer; // write buffer
-        int m_iovCnt;
-        struct iovec m_iov[2];
         // request
         std::string m_line;
         PARSE_STATE m_state;
@@ -47,6 +45,8 @@ namespace transmission { namespace webserver {
         int m_code;
         char* m_file;
         struct stat m_fileStat;
+        int m_iovCnt;
+        struct iovec m_iov[2];
 
     public:
         // basic
@@ -58,7 +58,6 @@ namespace transmission { namespace webserver {
         Http& operator = (Http&&) = delete;
         ssize_t readRequest(int fd, int *ern);
         ssize_t writeResponse(int fd, int *ern);
-        size_t toWriteBytes();
         void clearBuffer();
         // request & response
         void initNextHttp();
@@ -69,6 +68,7 @@ namespace transmission { namespace webserver {
         std::string getContent() const;
         bool isKeepAlive() const;
         int getCode() const;
+        size_t toWriteBytes();
         bool hasError() const;
         void unMapFile();
 
