@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/hzy/Projects/System/SimpleSystem/include -I/home/hzy/Projects/System/SimpleSystem/test
+CXX_INCLUDES = -I/home/hzy/Projects/System/SimpleWebServer/include -I/home/hzy/Projects/System/SimpleWebServer/test
 
 CXX_FLAGS =  -std=c++11 -pthread -g
 

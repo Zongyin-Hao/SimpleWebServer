@@ -1,7 +1,3 @@
-//
-// Created by hzy on 5/31/21.
-//
-
 #ifndef SIMPLESYSTEM_EPOLL_H
 #define SIMPLESYSTEM_EPOLL_H
 

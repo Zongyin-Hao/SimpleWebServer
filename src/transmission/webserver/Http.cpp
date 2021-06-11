@@ -1,20 +1,15 @@
-//
-// Created by hzy on 6/2/21.
-//
-
 #include "transmission/webserver/Http.h"
 #include "utils/Error.h"
-#include <cassert>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/uio.h>
-#include <sys/mman.h>
-#include <algorithm>
+#include <unistd.h> // close
+#include <fcntl.h> // O_RDONLY
+#include <sys/uio.h> // readv, writev
+#include <sys/mman.h> // mmap
 #include <string>
 #include <regex>
 #include <iostream>
 
 namespace transmission { namespace webserver {
+    // content type,不太全,可以去网上粘,也可以直接用我的
     static std::unordered_map<std::string, std::string> HTTP_TYPE = {
             { ".html",  "text/html" },
             { ".xml",   "text/xml" },
@@ -31,6 +26,7 @@ namespace transmission { namespace webserver {
             { ".mpeg",  "video/mpeg" },
             { ".mpg",   "video/mpeg" },
             { ".avi",   "video/x-msvideo" },
+            {".mp4",    "video/mpeg4"},
             { ".gz",    "application/x-gzip" },
             { ".tar",   "application/x-tar" },
             { ".css",   "text/css "},
@@ -45,24 +41,28 @@ namespace transmission { namespace webserver {
     };
 
     // ==============================basic==============================
+    // 初始化buffer和状态机
     Http::Http(int fd, bool debug) : m_fd(fd), m_readBuffer(1024),
     m_writeBuffer(1024), m_debug(debug) {
         clearBuffer();
         initNextHttp();
     }
 
+    // 从readBuffer中读取请求
+    // ET模式下WebServer会循环调用这个函数
     ssize_t Http::readRequest(int fd, int *ern) {
-        char buffer[65536];
+        char buffer[65536]; // 内核缓冲区比readBuffer剩余空间大时先存到这里,然后再对buffer进行扩容
         struct iovec iov[2];
         size_t wtb = m_readBuffer.writableBytes();
         iov[0].iov_base = m_readBuffer.nextWritePos();
         iov[0].iov_len = wtb;
         iov[1].iov_base = buffer;
         iov[1].iov_len = sizeof(buffer);
-        ssize_t len = readv(fd, iov, 2);
+        ssize_t len = readv(fd, iov, 2); // 等于0貌似是对端关闭连接来着,在WebServer里也要断开连接
         if (len < 0) {
             *ern = errno;
         } else if (len > 0) {
+            // 这里有的直接改buffer,有的只改下标,不太好看,不过为了效率就这么写吧...
             if (static_cast<size_t>(len) <= wtb) {
                 m_readBuffer.writeBuffer_idx(static_cast<size_t>(len));
             } else {
@@ -77,8 +77,10 @@ namespace transmission { namespace webserver {
         return len;
     }
 
+    // 将响应报文写入writeBuffer
+    // ET模式下WebServer会循环调用这个函数
     ssize_t Http::writeResponse(int fd, int *ern) {
-        ssize_t len = writev(fd, m_iov, m_iovCnt);
+        ssize_t len = writev(fd, m_iov, m_iovCnt); // 这个等于0没什么影响,一般就是内核缓冲区写不进去了
         if (len < 0) {
             *ern = errno;
         }
@@ -87,7 +89,7 @@ namespace transmission { namespace webserver {
                 m_iov[1].iov_base = (char*)m_iov[1].iov_base+(len-m_iov[0].iov_len);
                 m_iov[1].iov_len -= (len - m_iov[0].iov_len);
                 if (m_iov[0].iov_len != 0) {
-                    m_writeBuffer.readBufferAll_idx();
+                    m_writeBuffer.readBufferAll_idx(); // 相当于清空writeBuffer
                     m_iov[0].iov_len = 0;
                 }
             } else {
@@ -99,20 +101,16 @@ namespace transmission { namespace webserver {
         return len;
     }
 
-    size_t Http::toWriteBytes() {
-        if (m_iovCnt == 0) return 0;
-        else if (m_iovCnt == 1) return m_iov[0].iov_len;
-        return m_iov[0].iov_len + m_iov[1].iov_len;
-    }
-
+    // 清空缓冲区,初始化时用
     void Http::clearBuffer() {
         m_readBuffer.readBufferAll_idx();
         m_writeBuffer.readBufferAll_idx();
     }
 
     // ==============================request & response==============================
+    // 初始化状态机(注意这里不初始化buffer)
     void Http::initNextHttp() {
-        // request
+        // 请求报文相关
         m_line = "";
         m_state = START;
         m_method = "";
@@ -120,7 +118,7 @@ namespace transmission { namespace webserver {
         m_version = "";
         m_header.clear();
         m_content = "";
-        // response
+        // 响应报文相关
         m_code = OK;
         unMapFile();
         m_iovCnt = 0;
@@ -130,14 +128,14 @@ namespace transmission { namespace webserver {
         m_iov[1].iov_len = 0;
     }
 
-    // return false means incomplete
+    // 处理用户的请求(调用api或读取文件)
+    // true表示之后可以发送响应报文了(有错误的话code会相应地设为BAD_REQUEST,INTERNAL_ERROR等),false表示数据不完整,还需要继续等待数据到来
+    // userFunction是用户自定义的api
     bool Http::process(std::unordered_map<std::string, std::function<void(Http*)>> *userFunction) {
-        // main state machine
-        // notice that buffer data may be incomplete,
-        // or there may be more than one request
+        // 注意缓冲区里的请求可能不完整,也可能有多条请求,这些都要考虑在内
+        // 请求不完整时return false继续等数据就好,维护好状态机的全局状态
+        // 多条请求时要在response发完后重新调用process,形成一个环路
         while (true) {
-            // choose follow state machine
-            // we use if-else to facilitate the use of (continue, break)
             if (m_state == START) {
                 if (!readLine()) {
                     return false;
@@ -153,7 +151,7 @@ namespace transmission { namespace webserver {
                     return false;
                 }
             } else if (m_state == HEADER) {
-                if (m_line.empty()) {
+                if (m_line.empty()) { // header后一定有个空行,接着根据是否有content进行状态转移
                     if (getContentLength() == 0) {
                         m_state = FINISH;
                     } else {
@@ -172,6 +170,7 @@ namespace transmission { namespace webserver {
                     return false;
                 }
             } else if (m_state == CONTENT) {
+                // todo
                 utils::Error::Throw(utils::Error::SORRY);
             } else if (m_state == FINISH) {
                 if (m_debug) {
@@ -184,8 +183,9 @@ namespace transmission { namespace webserver {
             }
         }
         if (m_code == OK) {
-            execute(userFunction);
+            execute(userFunction); // 处理请求
         }
+        // 制作响应报文
         addStateLine();
         addHeader();
         addContent();
@@ -208,6 +208,7 @@ namespace transmission { namespace webserver {
         return m_content;
     }
 
+    // 是否是长连接,短连接时server会在发送完响应报文后关闭连接
     bool Http::isKeepAlive() const {
         if (m_header.count("Connection") == 1) {
             return m_header.find("Connection")->second == "keep-alive";
@@ -219,10 +220,19 @@ namespace transmission { namespace webserver {
         return m_code;
     }
 
+    // iov中还需要发送的数据量,用来判断响应报文是否发🎴完
+    size_t Http::toWriteBytes() {
+        if (m_iovCnt == 0) return 0;
+        else if (m_iovCnt == 1) return m_iov[0].iov_len;
+        return m_iov[0].iov_len + m_iov[1].iov_len;
+    }
+
+    // 当状态码为BAD_REQUEST或INTERNAL_ERROR时服务器关闭连接, hasError就是为此作判断的
     bool Http::hasError() const {
         return (m_code == BAD_REQUEST || m_code == INTERNAL_ERROR);
     }
 
+    // 用mmap后需要unmap
     void Http::unMapFile() {
         if(m_file != nullptr) {
             munmap(m_file, m_fileStat.st_size);
@@ -231,9 +241,9 @@ namespace transmission { namespace webserver {
         m_fileStat = {0};
     }
 
-    // true:get a line, false:incomplete
+    // true:get a line, false:数据不完整
     bool Http::readLine() {
-        const char CRLF[] = "\r\n";
+        const char CRLF[] = "\r\n"; // http除了content都是用\r\n作为每行结尾的
         // search the first position of CRLF in [readPos, writePos)
         const char* lineEnd = std::search(m_readBuffer.nextReadPos(),
                                           m_readBuffer.nextWritePos(),
@@ -255,6 +265,7 @@ namespace transmission { namespace webserver {
         return true;
     }
 
+    // 获取Content长度,用于判断是否需要继续处理content,现阶段只能处理GET就假设为0了
     size_t Http::getContentLength() {
         size_t len = 0;
         if (m_header.count("Content-Length") != 0) {
@@ -304,18 +315,21 @@ namespace transmission { namespace webserver {
         return false;
     }
 
+    // 其实用户api从WebServer那里传参过来也不怎么优雅...
     void Http::execute(std::unordered_map<std::string, std::function<void(Http*)>> *userFunction) {
         if (userFunction->count(m_path) == 1) {
+            // 根据路径调用用户api
             if (m_debug) {
                 std::cout << "[fd:" << m_fd << "] " << "call user function" << std::endl;
             }
             auto func = (*userFunction)[m_path];
             func(this);
         } else {
+            // 使用mmap将文件映射到m_file
             if (m_debug) {
                 std::cout << "[fd:" << m_fd << "] " << "read file" << std::endl;
             }
-            std::string path = "../www"+m_path;
+            std::string path = "../www"+m_path; // 我是默认在bin下面运行的,这个路径可以自己改一下
             if (stat(path.c_str(), &m_fileStat) < 0 || S_ISDIR(m_fileStat.st_mode)) {
                 if (m_debug) {
                     std::cout << "[fd:" << m_fd << "] " << "not found1" << std::endl;
@@ -323,7 +337,7 @@ namespace transmission { namespace webserver {
                 m_code = NOT_FOUND;
                 return;
             }
-            if (!(m_fileStat.st_mode & S_IROTH)) {
+            if (!(m_fileStat.st_mode & S_IROTH)) { // 权限判断
                 if (m_debug) {
                     std::cout << "[fd:" << m_fd << "] " << "forbidden" << std::endl;
                 }

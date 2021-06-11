@@ -67,10 +67,10 @@ RM = /snap/clion/152/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/hzy/Projects/System/SimpleSystem
+CMAKE_SOURCE_DIR = /home/hzy/Projects/System/SimpleWebServer
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/hzy/Projects/System/SimpleSystem/cmake-build-release
+CMAKE_BINARY_DIR = /home/hzy/Projects/System/SimpleWebServer/cmake-build-release
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -99,9 +99,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/hzy/Projects/System/SimpleSystem/cmake-build-release/CMakeFiles /home/hzy/Projects/System/SimpleSystem/cmake-build-release//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/hzy/Projects/System/SimpleWebServer/cmake-build-release/CMakeFiles /home/hzy/Projects/System/SimpleWebServer/cmake-build-release//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/hzy/Projects/System/SimpleSystem/cmake-build-release/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/hzy/Projects/System/SimpleWebServer/cmake-build-release/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -141,6 +141,33 @@ SimpleSystem: cmake_check_build_system
 SimpleSystem/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/build
 .PHONY : SimpleSystem/fast
+
+src/main.o: src/main.cpp.o
+
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
 src/transmission/webserver/Http.o: src/transmission/webserver/Http.cpp.o
 
@@ -331,33 +358,6 @@ src/utils/nio/Epoll.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/nio/Epoll.cpp.s
 .PHONY : src/utils/nio/Epoll.cpp.s
 
-test/main_t.o: test/main_t.cpp.o
-
-.PHONY : test/main_t.o
-
-# target to build an object file
-test/main_t.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/test/main_t.cpp.o
-.PHONY : test/main_t.cpp.o
-
-test/main_t.i: test/main_t.cpp.i
-
-.PHONY : test/main_t.i
-
-# target to preprocess a source file
-test/main_t.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/test/main_t.cpp.i
-.PHONY : test/main_t.cpp.i
-
-test/main_t.s: test/main_t.cpp.s
-
-.PHONY : test/main_t.s
-
-# target to generate assembly for a file
-test/main_t.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/test/main_t.cpp.s
-.PHONY : test/main_t.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -367,6 +367,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... SimpleSystem"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
 	@echo "... src/transmission/webserver/Http.o"
 	@echo "... src/transmission/webserver/Http.i"
 	@echo "... src/transmission/webserver/Http.s"
@@ -388,9 +391,6 @@ help:
 	@echo "... src/utils/nio/Epoll.o"
 	@echo "... src/utils/nio/Epoll.i"
 	@echo "... src/utils/nio/Epoll.s"
-	@echo "... test/main_t.o"
-	@echo "... test/main_t.i"
-	@echo "... test/main_t.s"
 .PHONY : help
 
 

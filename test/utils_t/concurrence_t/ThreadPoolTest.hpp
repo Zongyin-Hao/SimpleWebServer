@@ -1,7 +1,3 @@
-//
-// Created by hzy on 6/1/21.
-//
-
 #ifndef SIMPLESYSTEM_THREADPOOLTEST_HPP
 #define SIMPLESYSTEM_THREADPOOLTEST_HPP
 

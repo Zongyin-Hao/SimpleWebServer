@@ -1,7 +1,3 @@
-//
-// Created by hzy on 6/4/21.
-//
-
 #ifndef SIMPLESYSTEM_BUFFERTEST_HPP
 #define SIMPLESYSTEM_BUFFERTEST_HPP
 

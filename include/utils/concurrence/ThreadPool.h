@@ -1,7 +1,3 @@
-//
-// Created by hzy on 5/30/21.
-//
-
 #ifndef SIMPLESYSTEM_THREADPOOL_H
 #define SIMPLESYSTEM_THREADPOOL_H
 

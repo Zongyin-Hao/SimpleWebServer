@@ -1,4 +1,4 @@
-/snap/clion/152/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - Unix Makefiles" /home/hzy/Projects/System/SimpleSystem
+/snap/clion/152/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - Unix Makefiles" /home/hzy/Projects/System/SimpleWebServer
 -- Configuring done
 -- Generating done
--- Build files have been written to: /home/hzy/Projects/System/SimpleSystem/cmake-build-release
+-- Build files have been written to: /home/hzy/Projects/System/SimpleWebServer/cmake-build-release

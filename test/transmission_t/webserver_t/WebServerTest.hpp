@@ -1,7 +1,3 @@
-//
-// Created by hzy on 6/5/21.
-//
-
 #ifndef SIMPLESYSTEM_WEBSERVERTEST_HPP
 #define SIMPLESYSTEM_WEBSERVERTEST_HPP
 

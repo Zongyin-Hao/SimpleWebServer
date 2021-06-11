@@ -1,7 +1,3 @@
-//
-// Created by hzy on 6/1/21.
-//
-
 #ifndef SIMPLESYSTEM_BUFFER_H
 #define SIMPLESYSTEM_BUFFER_H
 

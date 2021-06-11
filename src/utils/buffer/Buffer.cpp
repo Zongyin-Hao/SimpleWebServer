@@ -1,7 +1,3 @@
-//
-// Created by hzy on 6/1/21.
-//
-
 #include "utils/buffer/Buffer.h"
 #include <cstring>
 #include <cassert>

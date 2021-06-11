@@ -1,7 +1,3 @@
-//
-// Created by hzy on 5/30/21.
-//
-
 #include "utils/concurrence/ThreadPool.h"
 
 #include <cassert>
@@ -54,7 +50,7 @@ namespace utils { namespace concurrence {
         }
     }
 
-    void ThreadPool::addTask(const Task &task) {
+    void ThreadPool::addTask(const Task &task) { // 这里不知道怎么弄完美转移,用范型一直出错...
         if (stop.load()) return;
         {
             std::lock_guard<std::mutex> lkg(m_mutex);

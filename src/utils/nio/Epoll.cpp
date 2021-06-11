@@ -1,7 +1,3 @@
-//
-// Created by hzy on 5/31/21.
-//
-
 #include "utils/nio/Epoll.h"
 #include <cassert>
 #include <unistd.h>

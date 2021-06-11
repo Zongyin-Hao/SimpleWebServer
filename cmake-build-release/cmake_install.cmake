@@ -1,4 +1,4 @@
-# Install script for directory: /home/hzy/Projects/System/SimpleSystem
+# Install script for directory: /home/hzy/Projects/System/SimpleWebServer
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/hzy/Projects/System/SimpleSystem/cmake-build-release/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/hzy/Projects/System/SimpleWebServer/cmake-build-release/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
