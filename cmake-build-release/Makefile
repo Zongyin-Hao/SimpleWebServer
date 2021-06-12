@@ -130,17 +130,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named SimpleSystem
+# Target rules for targets named SimpleWebServer
 
 # Build rule for target.
-SimpleSystem: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 SimpleSystem
-.PHONY : SimpleSystem
+SimpleWebServer: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 SimpleWebServer
+.PHONY : SimpleWebServer
 
 # fast build rule for target.
-SimpleSystem/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/build
-.PHONY : SimpleSystem/fast
+SimpleWebServer/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/build
+.PHONY : SimpleWebServer/fast
 
 src/main.o: src/main.cpp.o
 
@@ -148,7 +148,7 @@ src/main.o: src/main.cpp.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -157,7 +157,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -166,7 +166,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 src/transmission/webserver/Http.o: src/transmission/webserver/Http.cpp.o
@@ -175,7 +175,7 @@ src/transmission/webserver/Http.o: src/transmission/webserver/Http.cpp.o
 
 # target to build an object file
 src/transmission/webserver/Http.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/transmission/webserver/Http.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/transmission/webserver/Http.cpp.o
 .PHONY : src/transmission/webserver/Http.cpp.o
 
 src/transmission/webserver/Http.i: src/transmission/webserver/Http.cpp.i
@@ -184,7 +184,7 @@ src/transmission/webserver/Http.i: src/transmission/webserver/Http.cpp.i
 
 # target to preprocess a source file
 src/transmission/webserver/Http.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/transmission/webserver/Http.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/transmission/webserver/Http.cpp.i
 .PHONY : src/transmission/webserver/Http.cpp.i
 
 src/transmission/webserver/Http.s: src/transmission/webserver/Http.cpp.s
@@ -193,7 +193,7 @@ src/transmission/webserver/Http.s: src/transmission/webserver/Http.cpp.s
 
 # target to generate assembly for a file
 src/transmission/webserver/Http.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/transmission/webserver/Http.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/transmission/webserver/Http.cpp.s
 .PHONY : src/transmission/webserver/Http.cpp.s
 
 src/transmission/webserver/WebServer.o: src/transmission/webserver/WebServer.cpp.o
@@ -202,7 +202,7 @@ src/transmission/webserver/WebServer.o: src/transmission/webserver/WebServer.cpp
 
 # target to build an object file
 src/transmission/webserver/WebServer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/transmission/webserver/WebServer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/transmission/webserver/WebServer.cpp.o
 .PHONY : src/transmission/webserver/WebServer.cpp.o
 
 src/transmission/webserver/WebServer.i: src/transmission/webserver/WebServer.cpp.i
@@ -211,7 +211,7 @@ src/transmission/webserver/WebServer.i: src/transmission/webserver/WebServer.cpp
 
 # target to preprocess a source file
 src/transmission/webserver/WebServer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/transmission/webserver/WebServer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/transmission/webserver/WebServer.cpp.i
 .PHONY : src/transmission/webserver/WebServer.cpp.i
 
 src/transmission/webserver/WebServer.s: src/transmission/webserver/WebServer.cpp.s
@@ -220,7 +220,7 @@ src/transmission/webserver/WebServer.s: src/transmission/webserver/WebServer.cpp
 
 # target to generate assembly for a file
 src/transmission/webserver/WebServer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/transmission/webserver/WebServer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/transmission/webserver/WebServer.cpp.s
 .PHONY : src/transmission/webserver/WebServer.cpp.s
 
 src/utils/Config.o: src/utils/Config.cpp.o
@@ -229,7 +229,7 @@ src/utils/Config.o: src/utils/Config.cpp.o
 
 # target to build an object file
 src/utils/Config.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/Config.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/Config.cpp.o
 .PHONY : src/utils/Config.cpp.o
 
 src/utils/Config.i: src/utils/Config.cpp.i
@@ -238,7 +238,7 @@ src/utils/Config.i: src/utils/Config.cpp.i
 
 # target to preprocess a source file
 src/utils/Config.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/Config.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/Config.cpp.i
 .PHONY : src/utils/Config.cpp.i
 
 src/utils/Config.s: src/utils/Config.cpp.s
@@ -247,7 +247,7 @@ src/utils/Config.s: src/utils/Config.cpp.s
 
 # target to generate assembly for a file
 src/utils/Config.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/Config.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/Config.cpp.s
 .PHONY : src/utils/Config.cpp.s
 
 src/utils/Error.o: src/utils/Error.cpp.o
@@ -256,7 +256,7 @@ src/utils/Error.o: src/utils/Error.cpp.o
 
 # target to build an object file
 src/utils/Error.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/Error.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/Error.cpp.o
 .PHONY : src/utils/Error.cpp.o
 
 src/utils/Error.i: src/utils/Error.cpp.i
@@ -265,7 +265,7 @@ src/utils/Error.i: src/utils/Error.cpp.i
 
 # target to preprocess a source file
 src/utils/Error.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/Error.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/Error.cpp.i
 .PHONY : src/utils/Error.cpp.i
 
 src/utils/Error.s: src/utils/Error.cpp.s
@@ -274,7 +274,7 @@ src/utils/Error.s: src/utils/Error.cpp.s
 
 # target to generate assembly for a file
 src/utils/Error.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/Error.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/Error.cpp.s
 .PHONY : src/utils/Error.cpp.s
 
 src/utils/buffer/Buffer.o: src/utils/buffer/Buffer.cpp.o
@@ -283,7 +283,7 @@ src/utils/buffer/Buffer.o: src/utils/buffer/Buffer.cpp.o
 
 # target to build an object file
 src/utils/buffer/Buffer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/buffer/Buffer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/buffer/Buffer.cpp.o
 .PHONY : src/utils/buffer/Buffer.cpp.o
 
 src/utils/buffer/Buffer.i: src/utils/buffer/Buffer.cpp.i
@@ -292,7 +292,7 @@ src/utils/buffer/Buffer.i: src/utils/buffer/Buffer.cpp.i
 
 # target to preprocess a source file
 src/utils/buffer/Buffer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/buffer/Buffer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/buffer/Buffer.cpp.i
 .PHONY : src/utils/buffer/Buffer.cpp.i
 
 src/utils/buffer/Buffer.s: src/utils/buffer/Buffer.cpp.s
@@ -301,7 +301,7 @@ src/utils/buffer/Buffer.s: src/utils/buffer/Buffer.cpp.s
 
 # target to generate assembly for a file
 src/utils/buffer/Buffer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/buffer/Buffer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/buffer/Buffer.cpp.s
 .PHONY : src/utils/buffer/Buffer.cpp.s
 
 src/utils/concurrence/ThreadPool.o: src/utils/concurrence/ThreadPool.cpp.o
@@ -310,7 +310,7 @@ src/utils/concurrence/ThreadPool.o: src/utils/concurrence/ThreadPool.cpp.o
 
 # target to build an object file
 src/utils/concurrence/ThreadPool.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/concurrence/ThreadPool.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/concurrence/ThreadPool.cpp.o
 .PHONY : src/utils/concurrence/ThreadPool.cpp.o
 
 src/utils/concurrence/ThreadPool.i: src/utils/concurrence/ThreadPool.cpp.i
@@ -319,7 +319,7 @@ src/utils/concurrence/ThreadPool.i: src/utils/concurrence/ThreadPool.cpp.i
 
 # target to preprocess a source file
 src/utils/concurrence/ThreadPool.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/concurrence/ThreadPool.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/concurrence/ThreadPool.cpp.i
 .PHONY : src/utils/concurrence/ThreadPool.cpp.i
 
 src/utils/concurrence/ThreadPool.s: src/utils/concurrence/ThreadPool.cpp.s
@@ -328,7 +328,7 @@ src/utils/concurrence/ThreadPool.s: src/utils/concurrence/ThreadPool.cpp.s
 
 # target to generate assembly for a file
 src/utils/concurrence/ThreadPool.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/concurrence/ThreadPool.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/concurrence/ThreadPool.cpp.s
 .PHONY : src/utils/concurrence/ThreadPool.cpp.s
 
 src/utils/nio/Epoll.o: src/utils/nio/Epoll.cpp.o
@@ -337,7 +337,7 @@ src/utils/nio/Epoll.o: src/utils/nio/Epoll.cpp.o
 
 # target to build an object file
 src/utils/nio/Epoll.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/nio/Epoll.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/nio/Epoll.cpp.o
 .PHONY : src/utils/nio/Epoll.cpp.o
 
 src/utils/nio/Epoll.i: src/utils/nio/Epoll.cpp.i
@@ -346,7 +346,7 @@ src/utils/nio/Epoll.i: src/utils/nio/Epoll.cpp.i
 
 # target to preprocess a source file
 src/utils/nio/Epoll.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/nio/Epoll.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/nio/Epoll.cpp.i
 .PHONY : src/utils/nio/Epoll.cpp.i
 
 src/utils/nio/Epoll.s: src/utils/nio/Epoll.cpp.s
@@ -355,7 +355,7 @@ src/utils/nio/Epoll.s: src/utils/nio/Epoll.cpp.s
 
 # target to generate assembly for a file
 src/utils/nio/Epoll.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/src/utils/nio/Epoll.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/src/utils/nio/Epoll.cpp.s
 .PHONY : src/utils/nio/Epoll.cpp.s
 
 # Help Target
@@ -366,7 +366,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... SimpleSystem"
+	@echo "... SimpleWebServer"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

@@ -1,3 +1,3 @@
 /home/hzy/Projects/System/SimpleWebServer/cmake-build-debug/CMakeFiles/rebuild_cache.dir
 /home/hzy/Projects/System/SimpleWebServer/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/hzy/Projects/System/SimpleWebServer/cmake-build-debug/CMakeFiles/SimpleSystem.dir
+/home/hzy/Projects/System/SimpleWebServer/cmake-build-debug/CMakeFiles/SimpleWebServer.dir

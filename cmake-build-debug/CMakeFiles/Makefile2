@@ -72,7 +72,7 @@ CMAKE_BINARY_DIR = /home/hzy/Projects/System/SimpleWebServer/cmake-build-debug
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/SimpleSystem.dir/all
+all: CMakeFiles/SimpleWebServer.dir/all
 
 .PHONY : all
 
@@ -82,36 +82,36 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/SimpleSystem.dir/clean
+clean: CMakeFiles/SimpleWebServer.dir/clean
 
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/SimpleSystem.dir
+# Target rules for target CMakeFiles/SimpleWebServer.dir
 
 # All Build rule for target.
-CMakeFiles/SimpleSystem.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/hzy/Projects/System/SimpleWebServer/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9 "Built target SimpleSystem"
-.PHONY : CMakeFiles/SimpleSystem.dir/all
+CMakeFiles/SimpleWebServer.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/hzy/Projects/System/SimpleWebServer/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9 "Built target SimpleWebServer"
+.PHONY : CMakeFiles/SimpleWebServer.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/SimpleSystem.dir/rule: cmake_check_build_system
+CMakeFiles/SimpleWebServer.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/hzy/Projects/System/SimpleWebServer/cmake-build-debug/CMakeFiles 9
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/SimpleSystem.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/SimpleWebServer.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/hzy/Projects/System/SimpleWebServer/cmake-build-debug/CMakeFiles 0
-.PHONY : CMakeFiles/SimpleSystem.dir/rule
+.PHONY : CMakeFiles/SimpleWebServer.dir/rule
 
 # Convenience name for target.
-SimpleSystem: CMakeFiles/SimpleSystem.dir/rule
+SimpleWebServer: CMakeFiles/SimpleWebServer.dir/rule
 
-.PHONY : SimpleSystem
+.PHONY : SimpleWebServer
 
 # clean rule for target.
-CMakeFiles/SimpleSystem.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleSystem.dir/build.make CMakeFiles/SimpleSystem.dir/clean
-.PHONY : CMakeFiles/SimpleSystem.dir/clean
+CMakeFiles/SimpleWebServer.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleWebServer.dir/build.make CMakeFiles/SimpleWebServer.dir/clean
+.PHONY : CMakeFiles/SimpleWebServer.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
