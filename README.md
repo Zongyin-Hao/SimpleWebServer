@@ -65,7 +65,6 @@
 &emsp; &emsp; 出于上述考虑,我的项目结构如下.可以看到项目包含了上述的WebServer模块,Http模块,Epoll模块,Buffer模块和ThreadPool模块.Error模块做异常处理,Config模块做配置(暂未使用).  
 &emsp; &emsp; 此外,我的bin目录存放可执行程序,doc目录存放文档(其实是README用到的图片),include目录存放头文件,src目录存放源文件,test目录存放测试文件,tools目录存放一些工具,如代码行数统计,压测工具等.www目录存放网页用到的静态资源文件.  
 ![structure](./doc/readme/structure.png)  
-&emsp; &emsp; 从哪里开始呢?我在实现的时候是按照线程池->Epoll->Buffer->Http->WebServer这个顺序(其实在真正实现前我还把 [参考资料[1]](https://github.com/qinguoyi/TinyWebServer) 和 [参考资料[2]](https://github.com/markparticle/WebServer) 的源码读了一遍 ),下层模块过了单元测试,稳定了才继续构建上层模块.下面我会聊聊我的开发过程,推荐大家配合源码阅读.  
 &emsp; &emsp; (1) 线程池:  
 &emsp; &emsp; 基本原理是维护一个任务队列和一个线程池,每个线程里面都有一个无限循环,当任务队列为空时wait,不为空时取一个任务执行.每新添加一个新任务都会调用notify_one尝试唤醒一个线程.原理比较好理解,实现时发现大部分时间都在和C++11的特性斗智斗勇,包括thread,mutex,condition_variable,atomic,functional以及lamda表达式.话说回来我在实现addTask函数时是想写个模板做完美转发的,但一直报错,无奈传个左值引用了事.  
 &emsp; &emsp; (2) Epoll:  
