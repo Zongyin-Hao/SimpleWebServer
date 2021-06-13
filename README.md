@@ -41,41 +41,12 @@
 &emsp; &emsp; 这一节我会先结合原理描述webserver的完整流程,接着分享我的实现细节,包括项目结构,各模块功能,以及为什么这样设计等;  
 &emsp; &emsp;以获取一张图片为例,先看一下基本的流程:  
 &emsp; &emsp;(1) C向S发起请求  
-
-```mermaid
-graph LR
-	classDef default fill: #9AFF9A, stroke: #008B45, stroke-width: 2px;
-	subgraph  
-		NIC[网卡]--"通过DMA将网卡存储的数据拷贝到内核缓冲区<br>通过中断通知CPU数据到达,交给协议栈处理"-->FD[内核]
-		FD--socket收到通知,唤醒阻塞在read上的线程<br>将数据从内核缓冲区拷贝到用户缓冲区进行处理-->WebServer((S))
-	end
-	C((C))--给张图-->NIC
-```
+![CS](./doc/readme/CS.png)
 &emsp; &emsp;注:缓冲区分发送缓冲区和接收缓冲区,这里为了方便我们统称为缓冲区  
 &emsp; &emsp;(2) S处理请求  
-
-```mermaid
-graph LR
-	classDef default fill: #9AFF9A, stroke: #008B45, stroke-width: 2px;
-	subgraph S
-		1[解析Http请求报文]-->2[处理Http请求,根据请求路径获取图片]
-		2-->3[生成http响应报文]
-
-	end
-	R(从用户缓冲区<br>读取数据)-->1
-	3-->W(将数据写到<br>用户缓冲区)
-	
-```
+![SS](./doc/readme/SS.png)
 &emsp; &emsp;(3) S将图片发送给C  
-```mermaid
-graph RL
-	classDef default fill: #9AFF9A, stroke: #008B45, stroke-width: 2px;
-	subgraph  
-		WebServer((S))--通过write将数据从用户缓冲区拷贝到内核缓冲区<br>-->FD[内核]
-		FD--数据经协议栈进行封装-->NIC[网卡]
-	end
-	NIC--给你图-->C((C))
-```
+![SC](./doc/readme/SC.png)
 &emsp; &emsp;注: 数据从内核到网卡的具体流程我没有查到,是否是这样: 内核缓冲区中的数据通过DMA发送到网卡,网卡发送完数据后中断通知CPU可以继续发送数据?有了解的朋友可以在评论区指导一下.  
 &emsp; &emsp; OK,现在我们了解了通信的大体流程,接下来看看并发量升高时会有什么问题:  
 ![noepoll](./doc/readme/noepoll.png)  
@@ -92,7 +63,7 @@ graph RL
 &emsp; &emsp; 讨论了这么多,我们的框架终于确定下来了.epoll负责收发数据,线程池负责处理数据.这个框架大家习惯叫半同步半异步,或者半同步半反应堆.半同步是指epoll,因为epoll本质上还是阻塞的,属于同步IO(windows下的IOCP才是真正的异步IO).半异步/反应堆是指线程池,还是比较好理解的.  
 &emsp; &emsp; 原理就到这里,接下来开始实现,有些细节只有实现一次才会理解.先来想一下我们要做哪些工作.既然是半同步半反应堆,那么得有个epoll模块和线程池模块.网卡和内核那块不归我们管,但内核空间和用户空间的数据交互需要我们实现,这就需要一个buffer模块.因为我们是用的http(v1.1)协议进行通信,要进行请求报文的解析和响应报文的制作,以及文件的读取(以及用户api的调用),状态码的处理等,这些我们统一放在http模块中,在http模块里维护一个状态机去做这些事情.最后我们需要设计一个WebServer模块去统筹调度上述模块,形成一个整体.  
 &emsp; &emsp; 出于上述考虑,我的项目结构如下.可以看到项目包含了上述的WebServer模块,Http模块,Epoll模块,Buffer模块和ThreadPool模块.Error模块做异常处理,Config模块做配置(暂未使用).  
-&emsp; &emsp; 此外,我的bin目录存放可执行程序,doc目录存放文档(其实是README用到的图片),include目录存放头文件,src目录存放源文件,test目录存放测试文件,tools目录存放一些工具,如代码行数统计,压测工具等.www目录存放网页用到的静态资源文件.
+&emsp; &emsp; 此外,我的bin目录存放可执行程序,doc目录存放文档(其实是README用到的图片),include目录存放头文件,src目录存放源文件,test目录存放测试文件,tools目录存放一些工具,如代码行数统计,压测工具等.www目录存放网页用到的静态资源文件.  
 ![structure](./doc/readme/structure.png)  
 &emsp; &emsp; 从哪里开始呢?我在实现的时候是按照线程池->Epoll->Buffer->Http->WebServer这个顺序(其实在真正实现前我还把 [参考资料[1]](https://github.com/qinguoyi/TinyWebServer) 和 [参考资料[2]](https://github.com/markparticle/WebServer) 的源码读了一遍 ),下层模块过了单元测试,稳定了才继续构建上层模块.下面我会聊聊我的开发过程,推荐大家配合源码阅读.  
 &emsp; &emsp; (1) 线程池:  
