@@ -1,5 +1,5 @@
 # 简易Webserver的设计与实现  
-&emsp; &emsp; 最近出于个人兴趣用c++写了个webserver.用到了Epoll多路复用+线程池,实现了半同步半反应堆模型,支持ET模式.用buffer+状态机的方式实现了http/1.1请求报文的解析(目前只支持GET),使用mmap将文件映射到内存并生成响应报文,也支持根据请求路径调用用户编写的接口.想和大家交流一下实现过程中用到的技术 ~~外带一些吐槽~~ .我会尽量说清楚每个模块的作用以及为什么要这么做.很多内容都是出于个人理解,如果有错误欢迎去知乎留言(知乎链接待更新).如果有什么好的改进方案也欢迎在评论区留言.后续我也会进一步完善项目并更新文档.  
+&emsp; &emsp; 最近出于个人兴趣用c++写了个webserver.用到了Epoll多路复用+线程池,实现了半同步半反应堆模型,支持ET模式.用buffer+状态机的方式实现了http/1.1请求报文的解析(目前只支持GET),使用mmap将文件映射到内存并生成响应报文,也支持根据请求路径调用用户编写的接口.想和大家交流一下实现过程中用到的技术 ~~外带一些吐槽~~ .我会尽量说清楚每个模块的作用以及为什么要这么做.很多内容都是出于个人理解,如果有错误欢迎去知乎留言(https://zhuanlan.zhihu.com/p/381671234).如果有什么好的改进方案也欢迎在评论区留言.后续我也会进一步完善项目并更新文档.  
 &emsp; &emsp; [项目地址,欢迎star与pr.](https://github.com/Zongyin-Hao/SimpleWebServer)  
 ## 1 编译&运行  
 &emsp; &emsp; github上的项目是编译好的,二进制文件在bin目录下,运行时cd到bin目录执行./SimpleWebServer即可(注意由于路径问题一定要在bin目录下运行).默认端口55555.  
@@ -591,6 +591,6 @@ Content-Type: text/html; charset=UTF-8
 [6] http连接处理(下): https://mp.weixin.qq.com/s/451xNaSFHxcxfKlPBV3OCg  
 [7] IO多路复用: https://zhuanlan.zhihu.com/p/115220699  
 [8] Epoll: https://blog.csdn.net/baidu_41388533/article/details/110134366  
-[9] 线程池: https://www.cnblogs.com/lzpong/p/6397997.html
+[9] 线程池: https://www.cnblogs.com/lzpong/p/6397997.html  
 [10] buffer设计: https://blog.csdn.net/daaikuaichuan/article/details/88814044  
 [11] mmap:https://www.cnblogs.com/huxiao-tee/p/4660352.html
