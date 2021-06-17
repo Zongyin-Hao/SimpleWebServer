@@ -1,5 +1,4 @@
 # 简易Webserver的设计与实现  
-&emsp; &emsp; 备注:老师你说过认真写的话只写一个实验也行.于是我就想认真做一下实验一,从系统调用出发实现一个webserver.这个项目我已经上传到了github,不久也会上传到知乎,如果在网上看到了也不要奇怪.以下是github原文:  
 &emsp; &emsp; 最近出于个人兴趣用c++写了个webserver.用到了Epoll多路复用+线程池,实现了半同步半反应堆模型,支持ET模式.用buffer+状态机的方式实现了http/1.1请求报文的解析(目前只支持GET),使用mmap将文件映射到内存并生成响应报文,也支持根据请求路径调用用户编写的接口.想和大家交流一下实现过程中用到的技术 ~~外带一些吐槽~~ .我会尽量说清楚每个模块的作用以及为什么要这么做.很多内容都是出于个人理解,如果有错误欢迎去知乎留言(知乎链接待更新).如果有什么好的改进方案也欢迎在评论区留言.后续我也会进一步完善的项目并更新文档.  
 &emsp; &emsp; [项目地址,欢迎star与pr.](https://github.com/Zongyin-Hao/SimpleWebServer)  
 ## 1 编译&运行  
@@ -332,7 +331,247 @@ Content-Type: text/html; charset=UTF-8
         return true;
     }
 ```
-&emsp; &emsp; 
+&emsp; &emsp; 首先是状态机主体.考虑到content不以\r\n结尾,我没有选择在每次循环开始时调用readLine读取m_readBuffer中的一行数据,而是在每个状态处理完毕后判断是否需要继续readLine.接着依据当前的状态(START, REQUEST_LINE, HEADER, CONTENT, FINISH)调用相应的函数(parseRequestLine,parseHeader以及parseContent),并进行状态转移.HEADER转移时要注意判断Content-Length是否为0(不存在的话也视为0),等于0的话就没必要去解析content了.解析过程中如果readLine返回false则说明请求不完整,状态机向上层返回false表示继续等待数据到达.一次解析过程中状态m_state是持久化的,就是说如果当前解析到了HEADER,发现请求不完整返回false,那么下一次数据到达时状态机依然从HEADER状态进行解析.解析出一条报文后,若未出现请求格式错误或内部错误则调用execute执行请求(参数userFunction保存了请求路径到用户接口的映射,比如用户写了个helloworld函数,关联到了地址/hello上,那么userFunction这个map中就会保存一条<"/hello", helloworld()>),若出现了错误我采取的措施是生成响应报文告诉用户请求出错,随后断开连接释放所有资源.最后,状态机会依次调用addStateLine,addHeader,addContent制作请求报文保存到m_writeBuffer中,整个Http模块就完成了一次任务.  
+&emsp; &emsp; 上述过程涉及到了readLine,parseRequestLine,parseHeader以及parseContent,execute,addStateLine,addHeader,addContent等函数,其中readLine本质上是个字符串查询,parse*系列本质上就是一行正则表达式提取匹配字段,add*系列本质上就是做了一下字符串的拼接,这里就不详细介绍了,大家可以自行阅读源码.execute里用了mmap,这里需要介绍一下:  
+```c++
+    // 其实用户api从WebServer那里传参过来也不怎么优雅...
+    void Http::execute(std::unordered_map<std::string, std::function<void(Http*)>> *userFunction) {
+        if (userFunction->count(m_path) == 1) {
+            // 根据路径调用用户api
+            if (m_debug) {
+                std::cout << "[fd:" << m_fd << "] " << "call user function" << std::endl;
+            }
+            auto func = (*userFunction)[m_path];
+            func(this);
+        } else {
+            // 使用mmap将文件映射到m_file
+            if (m_debug) {
+                std::cout << "[fd:" << m_fd << "] " << "read file" << std::endl;
+            }
+            std::string path = "../www"+m_path; // 我是默认在bin下面运行的,这个路径可以自己改一下
+            if (stat(path.c_str(), &m_fileStat) < 0 || S_ISDIR(m_fileStat.st_mode)) {
+                if (m_debug) {
+                    std::cout << "[fd:" << m_fd << "] " << "not found1" << std::endl;
+                }
+                m_code = NOT_FOUND;
+                return;
+            }
+            if (!(m_fileStat.st_mode & S_IROTH)) { // 权限判断
+                if (m_debug) {
+                    std::cout << "[fd:" << m_fd << "] " << "forbidden" << std::endl;
+                }
+                m_code = FORBIDDEN;
+                return;
+            }
+            int fd = open(path.c_str(), O_RDONLY);
+            if (fd < 0) {
+                if (m_debug) {
+                    std::cout << "[fd:" << m_fd << "] " << "not found2" << std::endl;
+                }
+                m_code = NOT_FOUND;
+                return;
+            }
+            int* ret = (int*) mmap(nullptr, m_fileStat.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+            if (*ret == -1) {
+                if (m_debug) {
+                    std::cout << "[fd:" << m_fd << "] " << "not found3" << std::endl;
+                }
+                m_code = NOT_FOUND;
+                return;
+            }
+            m_file = (char*)ret;
+            close(fd);
+            if (m_debug) {
+                std::cout << "[fd:" << m_fd << "] " << "read successfully" << std::endl;
+            }
+        }
+    }
+```
+&emsp; &emsp; 首先execute会判断当前请求路径是否关联了用户接口,是的话调用用户接口.否则根据请求路径读取文件.若文件存在,且有访问权限,则使用mmap读取文件到m_file中.mmap使得磁盘到用户内存只需要一次拷贝(正常需要磁盘到页缓存再到用户内存两次拷贝).原理如下(截自 [参考资料11](https://www.cnblogs.com/huxiao-tee/p/4660352.html) ):  
+&emsp; &emsp; mmap是一种内存映射文件的方法，即将一个文件或者其它对象映射到进程的地址空间，实现文件磁盘地址和进程虚拟地址空间中一段虚拟地址的一一对映关系。实现这样的映射关系后，进程就可以采用指针的方式读写操作这一段内存，而系统会自动回写脏页面到对应的文件磁盘上，即完成了对文件的操作而不必再调用read,write等系统调用函数。相反，内核空间对这段区域的修改也直接反映用户空间，从而可以实现不同进程间的文件共享  
+&emsp; &emsp; 常规文件操作为了提高读写效率和保护磁盘，使用了页缓存机制。这样造成读文件时需要先将文件页从磁盘拷贝到页缓存中，由于页缓存处在内核空间，不能被用户进程直接寻址，所以还需要将页缓存中数据页再次拷贝到内存对应的用户空间中。这样，通过了两次数据拷贝过程，才能完成进程对文件内容的获取任务。写操作也是一样，待写入的buffer在内核空间不能直接访问，必须要先拷贝至内核空间对应的主存，再写回磁盘中（延迟写回），也是需要两次数据拷贝。  
+&emsp; &emsp; 而使用mmap操作文件中，创建新的虚拟内存区域和建立文件磁盘地址和虚拟内存区域映射这两步，没有任何文件拷贝操作。而之后访问数据时发现内存中并无数据而发起的缺页异常过程，可以通过已经建立好的映射关系，只使用一次数据拷贝，就从磁盘中将数据传入内存的用户空间中，供进程使用。  
+&emsp; &emsp; 总算把Http模块写完了! 回顾一下,我们了解了http报文结构,状态码的定义;用io向量读写缓冲区;用状态机从m_readBuffer中解析请求报文,处理请求(根据请求路径调用用户接口或用mmap读取请求文件),并生成响应报文到m_writeBuffer中.不过仔细想想整个项目还没运转起来,线程池呢?Epoll呢?Http模块缓冲区的读写函数该怎么调用?状态机该怎么调用?如何做并发控制?最后的统筹调度工作我们交给WebServer模块去做.  
+&emsp; &emsp; (5) WebServer模块  
+&emsp; &emsp; 先把上面的图拿下来,围绕这两张图以及WebServer的主体代码讨论WebServer模块应该做什么.
+![epollin](./doc/readme/epollin.png)  
+![epollout](./doc/readme/epollout.png)  
+```c++
+    void WebServer::start() {
+        // 由于设置了oneshot每个fd只会被一个线程处理,因此每个事件内部是无数据竞争的
+        // 但不同事件间可能有数据竞争,这个在delUser里作了处理(分析一下会发现就delUser会有问题,其余函数都是线程安全的)
+        while (!isClosed) {
+            if (m_debug) {
+                std::cout << "========================================" << std::endl;
+            }
+            // blocking
+            int eventCnt = m_epoll.wait(-1);
+            // process events
+            for (int i = 0; i < eventCnt; i++) {
+                int fd = m_epoll.getFd(i);
+                uint32_t events = m_epoll.getEvent(i);
+                if (fd == m_fd) {
+                    addUser();
+                } else if (events & (EPOLLRDHUP|EPOLLHUP|EPOLLERR)) {
+                    delUser(fd);
+                } else if (events & EPOLLIN) {
+                    processRead(fd);
+                } else if (events & EPOLLOUT) {
+                    processWrite(fd);
+                } else {
+                    utils::Error::Throw(utils::Error::EPOLL_UNEXPECTED_ERROR);
+                }
+            }
+        }
+    }
+```
+&emsp; &emsp; 可以看到WebServer的主体代码本质上也是个状态机.没事的时候epoll会阻塞在wait上.若当前事件的描述符与epoll的描述符相同,则说明要建立新的连接,WebServer会调用addUser去accept这个连接,在epoll中为accept到的描述符注册一个新事件,并创建一个Http对象负责处理这个连接的请求. EPOLLIN事件到来时WebServer会调用processRead将内核缓冲区的请求报文拷贝到相关Http对象的读缓冲区,处理请求,这个过程会创建一个任务,交给线程池去执行.EPOLLOUT事件到来时表示内核缓冲区可写,WebServer会调用processWrite将相关Http对象写缓冲区的响应报文写入内核缓冲区,这个过程同样也会创建一个任务,交给线程池去处理.EPOLLRDHUP|EPOLLHUP|EPOLLERR表示对端关闭或者出错,此时调用delUser关闭连接,在epoll中删除相应的事件,并删除对应的Http对象.  
+&emsp; &emsp; addUser,delUser,processRead,processWrite等函数的实现如下:  
+&emsp; &emsp; (1) processRead & processWrite:
+```c++
+    void WebServer::processRead(int fd) {
+        assert(m_users.count(fd) > 0);
+        Http* user = m_users[fd];
+        assert(user != nullptr);
+        if (m_debug) {
+            std::cout << "epoll in" << std::endl;
+        }
+        m_threadPool.addTask([this, fd, user] {
+            // read request
+            while (true) {
+                int ern = 0;
+                ssize_t ret = user->readRequest(fd, &ern);
+                if (ret < 0) {
+                    if (ern == EAGAIN || ern == EWOULDBLOCK) {
+                        break;
+                    }
+                    if (m_debug) {
+                        std::cout << "processRead:ret < 0:delete user" << std::endl;
+                    }
+                    delUser(fd);
+                    return;
+                } else if (ret == 0) {
+                    if (m_debug) {
+                        std::cout << "processRead:ret == 0:delete user" << std::endl;
+                    }
+                    delUser(fd);
+                    return;
+                }
+            }
+            // 处理请求
+            if (user->process(&userFunction)) {
+                // 注意由于设置了oneshot这里要更新一下才能继续使用这个fd
+                m_epoll.modFd(fd, m_userEvent | EPOLLOUT);
+            } else {
+                // 请求不完整,继续等待数据
+                m_epoll.modFd(fd, m_userEvent | EPOLLIN);
+            }
+        });
+    }
+
+    void WebServer::processWrite(int fd) {
+        assert(m_users.count(fd) > 0);
+        Http* user = m_users[fd];
+        assert(user != nullptr);
+        if (m_debug) {
+            std::cout << "epoll out" << std::endl;
+        }
+        m_threadPool.addTask([this, fd, user] {
+            while (true) {
+                int ern = 0;
+                ssize_t ret = user->writeResponse(fd, &ern);
+                if (ret < 0) {
+                    if (ern == EAGAIN || ern == EWOULDBLOCK) {
+                        break;
+                    }
+                    if (m_debug) {
+                        std::cout << "processWrite:ret < 0:delete user" << std::endl;
+                    }
+                    delUser(fd);
+                } else if (ret == 0) {
+                    break;
+                }
+            }
+            if (user->toWriteBytes() == 0) {
+                // buffer dirty
+                if (user->hasError()) {
+                    if (m_debug) {
+                        std::cout << "processWrite:has error:delete user" << std::endl;
+                    }
+                    delUser(fd);
+                    return;
+                }
+                // 短连接时server会在发送完响应报文后关闭连接
+                if (!user->isKeepAlive()) {
+                    if (m_debug) {
+                        std::cout << "processWrite:keep alive:delete user" << std::endl;
+                    }
+                    delUser(fd);
+                    return;
+                }
+                // 如process中描述的那样, 多条请求时要在response发完后重新调用process,形成一个环路
+                user->initNextHttp();
+                if (user->process(&userFunction)) {
+                    m_epoll.modFd(fd, m_userEvent | EPOLLOUT);
+                } else {
+                    m_epoll.modFd(fd, m_userEvent | EPOLLIN);
+                }
+            } else {
+                m_epoll.modFd(fd, m_userEvent | EPOLLOUT);
+            }
+        });
+    }
+```
+&emsp; &emsp; 这里涉及到了与Http模块缓冲区的交互,也是之前遗留下来的一个问题.我们先来了解一下LT(水平触发)模式和ET(边缘触发)模式.LT模式下只要内核缓冲区不为空/不满就持续触发EPOLLIN/EPOLLOUT去通知用户读取/写入,而ET模式下只有缓冲区从空到非空/从满到非满时才会触发一次EPOLLIN/EPOLLOUT去通知用户读取/写入.换言之,LT模式下一次EPOLLIN/EPOLLOUT可以只进行一次read/wirte,这次没有读/写完的话epoll还会继续通知.但在ET模式下不能这样做.假设客户只发了一条请求,服务器完整接受并保存在了内核缓冲区.由于用户缓冲区大小的限制,只有一半请求从内核拷贝到了用户.在这个场景下客户后续不再发送请求,不会再触发EPOLLIN,也就是说另一半请求会一直留在内核缓冲区中读不出来.ET模式需要我们在一次EPOLLIN时循环读取内核数据,直到errorno == EAGAIN, 表示内核缓冲区中已无数据(写的时候一般没什么问题,不过为了效率也采用循环写比较好).另外,ET模式通常是比LT模式高效的,我项目也是采用了ET模式.  
+&emsp; &emsp; 还有一个很重要的问题,由于此处涉及到了并发,需警惕并发漏洞.庆幸的是,epoll的EPOLLONESHOT选项帮助我们简化了这个问题.设置EPOLLONESHOT后一个事件只会被触发一次,也就是说它触发后只能被一个线程处理(不设置EPOLLONESHOT的话可能会有多个线程同时修改一个Http对象).这样可以保证一个事件不会和自己产生数据竞争.注意要在线程处理结束后重新设置这个事件,不然会影响后续的正常使用.  
+&emsp; &emsp; 另外,在processWrite中还有一些关键设置.一是在发送完响应报文后立即初始化并执行状态机.这样是为了处理上面提到的m_readBuffer中有多条请求的情况.现在整个过程形成了一个闭环,保证所有请求都能得到处理.二是我特别处理了一下请求出错的情况,在发送完响应报文后会关闭连接,保护服务器.关于发送完报文再关闭连接这个操作可以去设置socket的linger,里面可以选择正常FIN,RST或是定时FIN+RST,我用了定时(1s)FIN+RST,毕竟关闭连接时也不想让服务器等太长时间.  
+&emsp; &emsp; (2) addUser & delUser:
+```c++
+    void WebServer::addUser() {
+        struct sockaddr_in address = {};
+        socklen_t len = sizeof(address);
+        while (true) {
+            int fd = accept(m_fd, (struct sockaddr*)&address, &len);
+            // 举个例子,fd=4被close以后下次accept的fd可能还是4,也就是说一个序号会被重复利用
+            // 因此我没有delete掉Http,而是每次重新初始化,这样空间会耗费一些,但就不用每次都new了,会快一点
+            if (fd < 0 || m_userCnt >= MAX_USER) {
+                return;
+            }
+            setNonBlocking(fd);
+            if (m_users.count(fd) == 0) {
+                m_users[fd] = new Http(fd, m_debug);
+            } else {
+                Http* user = m_users[fd];
+                user->clearBuffer();
+                user->initNextHttp();
+            }
+            m_userCnt++;
+            m_epoll.addFd(fd, m_userEvent | EPOLLIN);
+            if (m_debug) {
+                std::cout << "add user, fd = " << fd << std::endl;
+                std::cout << "userCnt = " << m_userCnt << std::endl;
+            }
+        }
+    }
+
+     void WebServer::delUser(int fd) {
+        assert(m_users.count(fd) > 0);
+        assert(m_users[fd] != nullptr);
+        // 由于多个任务可能并发调用delUser,这里会发生数据竞争,所以用了原子变量
+        m_userCnt--;
+        m_epoll.delFd(fd);
+        close(fd);
+        if (m_debug) {
+            std::cout << "delete user, fd = " << fd << std::endl;
+            std::cout << "userCnt = " << m_userCnt << std::endl;
+        }
+    }
+``` 
+&emsp; &emsp; epoll需要为套接字设置非阻塞模式,addUser中的while(true) accept就是最好的例子.观察一下会发现这个死循环只有当accept接受不到新连接时才会跳出,而在阻塞模式下accept接受不到新连接的话会阻塞,会永远卡死在这个地方.同理ET模式的while循环中也会有这个问题.所以我们把所有套接字都设置成了非阻塞模式.  
+&emsp; &emsp; 另外,被释放的套接字编号是可以再次被accept利用的,这时我并没有重新new一个Http对象,而是选择了直接初始化(清空缓冲区+初始化状机).  
+&emsp; &emsp; addUser, delUser中的m_userCnt可能会被多个线程同时更新,因此要使用原子变量避免数据竞争.由于我们并没有去delete Http对象,因此无需担心m_users的数据竞争.epoll自身是线程安全的,也不需要我们担心.  
+&emsp; &emsp; 至此,项目构建完毕,大功告成!  
+&emsp; &emsp; // todo:后面抽时间加个流程总结,最近实在有点忙.
 ## 4 压测&对比  
 &emsp; &emsp; 这一节我会用webbence1.5对本文的WebServer(SimpleWebServer), [参考资料[2]](https://github.com/markparticle/WebServer) 的WebServer(先叫它MPWebServer吧)以及gin做压测对比,向它们请求同一张图片(40KB).环境是deepin20+AMD R7 4800U+16GB,SimpleWebServer和MPWebServer均开启O3优化.因为没有合适的设备,压测程序和WebServer都放在了本机上.创建100个连接压测5秒  
 &emsp; &emsp; (1) SimpleWebserver,11400QPS:  
@@ -353,4 +592,5 @@ Content-Type: text/html; charset=UTF-8
 [7] IO多路复用: https://zhuanlan.zhihu.com/p/115220699  
 [8] Epoll: https://blog.csdn.net/baidu_41388533/article/details/110134366  
 [9] 线程池: https://www.cnblogs.com/lzpong/p/6397997.html  
-[10] buffer设计: https://blog.csdn.net/daaikuaichuan/article/details/88814044
+[10] buffer设计: https://blog.csdn.net/daaikuaichuan/article/details/88814044  
+[11] mmap:https://www.cnblogs.com/huxiao-tee/p/4660352.html

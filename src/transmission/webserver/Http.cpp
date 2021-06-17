@@ -242,28 +242,7 @@ namespace transmission { namespace webserver {
     }
 
     // true:get a line, false:数据不完整
-    bool Http::readLine() {
-        const char CRLF[] = "\r\n"; // http除了content都是用\r\n作为每行结尾的
-        // search the first position of CRLF in [readPos, writePos)
-        const char* lineEnd = std::search(m_readBuffer.nextReadPos(),
-                                          m_readBuffer.nextWritePos(),
-                                          CRLF, CRLF+2);
-        // data incomplete
-        if (lineEnd == m_readBuffer.nextWritePos()) {
-            if (m_debug) {
-                std::cout << "[fd:" << m_fd << "] " << "incomplete" << std::endl;
-                m_readBuffer.output();
-            }
-            return false;
-        }
-        // get a line
-        m_line = m_readBuffer.readBuffer(lineEnd - m_readBuffer.nextReadPos());
-        m_readBuffer.readBuffer(2); // CRLF;
-        if (m_debug) {
-            std::cout << "[fd:" << m_fd << "] " << "line = " << m_line << std::endl;
-        }
-        return true;
-    }
+    c
 
     // 获取Content长度,用于判断是否需要继续处理content,现阶段只能处理GET就假设为0了
     size_t Http::getContentLength() {
