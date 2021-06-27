@@ -32,7 +32,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2444c444-42c4-4cbe-a5e7-089f4d9ab038" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/transmission/webserver/Http.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/transmission/webserver/Http.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,11 +77,6 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -111,7 +106,10 @@
       <workItem from="1623678618386" duration="3491000" />
       <workItem from="1623846385287" duration="5750000" />
       <workItem from="1623885933779" duration="2865000" />
-      <workItem from="1623916451333" duration="9970000" />
+      <workItem from="1623916451333" duration="10276000" />
+      <workItem from="1624625179503" duration="1062000" />
+      <workItem from="1624629616685" duration="7000" />
+      <workItem from="1624751322500" duration="1539000" />
     </task>
     <servers />
   </component>
@@ -139,6 +137,10 @@
       <screen x="0" y="0" width="1920" height="1030" />
     </state>
     <state x="632" y="194" width="657" height="644" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1030/1920.0.1920.1080@0.0.1920.1030" timestamp="1623850302384" />
+    <state x="681" y="216" key="FileChooserDialogImpl" timestamp="1624629620869">
+      <screen x="0" y="0" width="1920" height="1030" />
+    </state>
+    <state x="681" y="216" key="FileChooserDialogImpl/0.0.1920.1030@0.0.1920.1030" timestamp="1624629620868" />
     <state x="156" y="42" width="1591" height="927" key="SettingsEditor" timestamp="1623605149673">
       <screen x="0" y="0" width="1920" height="1030" />
     </state>
