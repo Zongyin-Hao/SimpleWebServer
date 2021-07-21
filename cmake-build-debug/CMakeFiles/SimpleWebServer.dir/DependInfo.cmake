@@ -7,7 +7,6 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/hzy/Projects/SimpleWebServer/src/main.cpp" "/home/hzy/Projects/SimpleWebServer/cmake-build-debug/CMakeFiles/SimpleWebServer.dir/src/main.cpp.o"
   "/home/hzy/Projects/SimpleWebServer/src/transmission/webserver/Http.cpp" "/home/hzy/Projects/SimpleWebServer/cmake-build-debug/CMakeFiles/SimpleWebServer.dir/src/transmission/webserver/Http.cpp.o"
   "/home/hzy/Projects/SimpleWebServer/src/transmission/webserver/WebServer.cpp" "/home/hzy/Projects/SimpleWebServer/cmake-build-debug/CMakeFiles/SimpleWebServer.dir/src/transmission/webserver/WebServer.cpp.o"
-  "/home/hzy/Projects/SimpleWebServer/src/utils/Config.cpp" "/home/hzy/Projects/SimpleWebServer/cmake-build-debug/CMakeFiles/SimpleWebServer.dir/src/utils/Config.cpp.o"
   "/home/hzy/Projects/SimpleWebServer/src/utils/Error.cpp" "/home/hzy/Projects/SimpleWebServer/cmake-build-debug/CMakeFiles/SimpleWebServer.dir/src/utils/Error.cpp.o"
   "/home/hzy/Projects/SimpleWebServer/src/utils/buffer/Buffer.cpp" "/home/hzy/Projects/SimpleWebServer/cmake-build-debug/CMakeFiles/SimpleWebServer.dir/src/utils/buffer/Buffer.cpp.o"
   "/home/hzy/Projects/SimpleWebServer/src/utils/concurrence/ThreadPool.cpp" "/home/hzy/Projects/SimpleWebServer/cmake-build-debug/CMakeFiles/SimpleWebServer.dir/src/utils/concurrence/ThreadPool.cpp.o"

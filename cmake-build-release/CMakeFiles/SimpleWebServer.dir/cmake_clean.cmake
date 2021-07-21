@@ -4,7 +4,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/SimpleWebServer.dir/src/main.cpp.o"
   "CMakeFiles/SimpleWebServer.dir/src/transmission/webserver/Http.cpp.o"
   "CMakeFiles/SimpleWebServer.dir/src/transmission/webserver/WebServer.cpp.o"
-  "CMakeFiles/SimpleWebServer.dir/src/utils/Config.cpp.o"
   "CMakeFiles/SimpleWebServer.dir/src/utils/Error.cpp.o"
   "CMakeFiles/SimpleWebServer.dir/src/utils/buffer/Buffer.cpp.o"
   "CMakeFiles/SimpleWebServer.dir/src/utils/concurrence/ThreadPool.cpp.o"

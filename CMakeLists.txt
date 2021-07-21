@@ -16,7 +16,6 @@ add_executable(${PROJECT_NAME}
         src/utils/concurrence/ThreadPool.cpp
         src/utils/buffer/Buffer.cpp
         src/utils/nio/Epoll.cpp
-        src/utils/Config.cpp
         src/utils/Error.cpp
 
         test/utils_t/concurrence_t/ThreadPoolTest.hpp

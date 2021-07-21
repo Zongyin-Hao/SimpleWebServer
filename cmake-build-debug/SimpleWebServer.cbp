@@ -97,9 +97,6 @@
 		<Unit filename="/home/hzy/Projects/SimpleWebServer/src/transmission/webserver/WebServer.cpp">
 			<Option target="SimpleWebServer"/>
 		</Unit>
-		<Unit filename="/home/hzy/Projects/SimpleWebServer/src/utils/Config.cpp">
-			<Option target="SimpleWebServer"/>
-		</Unit>
 		<Unit filename="/home/hzy/Projects/SimpleWebServer/src/utils/Error.cpp">
 			<Option target="SimpleWebServer"/>
 		</Unit>
