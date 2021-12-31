@@ -67,7 +67,7 @@ int main() {
 ![epollin](./doc/readme_pic/epollin.png)  
 &emsp; &emsp; (2) 回复响应报文:  
 ![epollout](./doc/readme_pic/epollout.png)  
-&emsp; &emsp; 有了epoll,我们可以只用一个线程方便地把数据从内核缓冲区拷贝到用户缓冲区.然而,为提升处理效率,应充分发挥多核处理器的优势,因此采用线程池并行处理请求.  
+&emsp; &emsp; 有了epoll,我们可以只用一个线程方便地管理大量连接.接下来只需要用线程池处理请求即可.  
 ![threadpool](./doc/readme_pic/threadpool.png)  
 &emsp; &emsp; 讨论:线程池容量不一定要严格等于处理器核心数.可以设为核心数+2防止有线程意外宕掉.如果处理任务要和磁盘打交道的话可以设得更多(这样可以使得部分线程在cpu执行时,另一部分线程能够通过DMA与磁盘打交道,提高cpu利用率).这些都取决于实际场景.  
 &emsp; &emsp; 上述框架中,epoll负责收发数据,线程池负责处理数据.这个框架大家习惯叫半同步半反应堆.半同步是指epoll,因为epoll本质上是阻塞的,属于同步IO(windows下的IOCP才是真正的异步IO).半反应堆是指线程池,用于并行处理请求.  
